@@ -7,16 +7,20 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tunnel": "ngrok http 8080"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bruriah1999/webHookMyHeart.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bruriah1999/webHookMyHeart/issues"
+  },
+  "homepage": "https://github.com/bruriah1999/webHookMyHeart#readme",
   "dependencies": {
     "actions-on-google": "^2.12.0",
-    "dialogflow": "^0.10.3",
-    "dialogflow-fulfillment": "github:dialogflow/dialogflow-fulfillment-nodejs#c5f155",
+    "dialogflow-fulfillment": "^0.6.1",
     "express": "^4.17.1",
-    "uuid": "^3.3.3"
-  },
-  "devDependencies": {
     "ngrok": "^3.2.5"
   }
 }
