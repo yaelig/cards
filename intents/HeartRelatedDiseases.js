@@ -1,5 +1,7 @@
-const yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
-const noPhrases=['no','nope','nah','not','not at all'];
+const {addToJson}=require('../app')
+var yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
+var noPhrases=['no','nope','nah','not','not at all'];
+var data;
 var diabetes,cholesterol,heart_disease,no_diabetes,no_cholesterol,no_heart_disease;
 class HeartRealtedDiseases{
     constructor(agent){
@@ -12,6 +14,21 @@ class HeartRealtedDiseases{
          no_cholesterol=this.agent.parameters.cholesterol=='no_cholesterol'?true:false;
          no_heart_disease=this.agent.parameters.heart_disease=='no_heart_disease'?true:false;
 
+          // this.agent.setContext('inform.HeartRelatedDiseases');
+          // const context = {'name': 'await_obesity_and_exercise', 'lifespan': 2, 'parameters': {'diabetes': 'Moshe'}};
+          // this.agent.setContext(context);
+          // this.agent.context.set({         
+          //   'name':'await_obesity_and_exercise',
+          //   'lifespan': 5,
+          //   'parameters':{
+          //     'exercise':'moshe'
+          //     }
+          // });
+        // this.agent.context.get('await_heart_related_diseases').parameters.diabetes='diabetes';
+          // await_heart.parameters.diabetes='moshe';
+          // await_heart.parameters['diabetes.original']='moshe2'
+    
+  
     }
     heartRelatedDisease_no(gotDiabetes,gotCholesterol,gotHeart_disease){
         if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
@@ -39,8 +56,10 @@ class HeartRealtedDiseases{
     }
    }
     foo() {
-    
-     
+     const gotDiabetes= this.agent.parameters.diabetes.length>0;
+     const gotCholesterol=cholesterol.length>0;
+     const gotHeart_disease=heart_disease.length>0;
+
      if(no_diabetes.length){
        diabetes='flase';
      }
@@ -50,11 +69,6 @@ class HeartRealtedDiseases{
      if(no_heart_disease){
        heart_disease='false';
      }
-
-     let gotDiabetes=diabetes.length>0;
-     let gotCholesterol=cholesterol.length>0;
-     let gotHeart_disease=heart_disease.length>0;
-
      if(yesPhrases.includes(this.agent.query)){
         return this.heartRelatedDisease_yes(gotDiabetes,gotCholesterol,gotHeart_disease)
        }else if(noPhrases.includes(this.agent.query)){
@@ -62,6 +76,7 @@ class HeartRealtedDiseases{
        }
    
      if(gotDiabetes && gotCholesterol&&gotHeart_disease) {
+     data=this.agent.parameters;
         return 'Thanks for that, please tell me about your exercise habits, i need to know if exercise and if you suffer from obesity'
     } else if(gotDiabetes && gotCholesterol&&!gotHeart_disease) {
         return 'sorry to hear, do you suffer now or in the past from any specific heart diseses or had experienced a heart attack? please detail';
@@ -78,6 +93,10 @@ class HeartRealtedDiseases{
     }else if(!gotDiabetes && !gotCholesterol&&!gotHeart_disease){
         return 'is there any heart disease or related the you suffer from or had in the past?';
     }
+  }
+  getData()
+  {
+    return data;
   }
     }
 
