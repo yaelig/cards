@@ -1,16 +1,11 @@
 const app=require('../app')
 const yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
 const noPhrases=['no','nope','nah','not'];
-let exercise,obesity,no_exercise,no_obesity;
-var data;
+var data,stringData='';
+var gotExercise,gotObesity
 class ObesityAndExercise{
   constructor(agent){
     this.agent=agent;
-     exercise=this.agent.parameters['exercise'];
-     obesity=this.agent.parameters['obesity'];
-
-     no_exercise=this.agent.parameters.exercise=='no_exercise'?true:false;
-     no_obesity=this.agent.parameters.obesity=='no_obesity'?true:false;
      }
      obesityAndExercise_no(gotExercise,gotObesity){
       if (gotExercise && !gotObesity){
@@ -35,15 +30,22 @@ class ObesityAndExercise{
  }
 
      foo() {     
+       
+      stringData+=this.agent.query+" ";
+      const exercise=this.agent.parameters['exercise'];
+      const obesity=this.agent.parameters['obesity'];
+ 
+      const no_exercise=this.agent.parameters.exercise=='no_exercise'?true:false;
+      const no_obesity=this.agent.parameters.obesity=='no_obesity'?true:false;
+
       if(no_exercise.length>0){
         exercise='false';
       }
       if(no_obesity.length>0){
         obesity='false';
       }
-
-       const gotExercise=exercise.length>0;
-       const gotObesity=obesity.length>0;
+        gotExercise=exercise.length>0;
+        gotObesity=obesity.length>0;
 
      if(yesPhrases.includes(this.agent.query)){
       console.log("got obesity and gotexercise before function: "+gotObesity+" " +gotExercise)
@@ -58,7 +60,7 @@ class ObesityAndExercise{
       if(gotExercise&&gotObesity){
        // this.add_oae()
       data=this.agent.parameters;
-        return 'Ok thanks for that, say drugs if you take any drugs regularly';
+        return 'Ok thanks for that, Do you take any drugs regularly? please detail';
       }
       else if (gotExercise && !gotObesity) {
         return 'I am glad you exercise, do you suffer from obesity?';
@@ -72,17 +74,9 @@ class ObesityAndExercise{
   {
     return data;
   }
-  add_oae(idPerson,Exercise,obesity,ExerciseOften,dateExercise)
-{
-   request({
-  url:'http://localhost:64502/api/oae/saveOae',
-  method: 'POST',
-  json: true, body:{idPerson,Exercise,obesity,ExerciseOften,dateExercise}
-}
-, function(error, response, body){
-  console.log(body);
-});
-}
+  getQuery(){
+    return stringData;
+  }
 
 }
  module.exports=ObesityAndExercise

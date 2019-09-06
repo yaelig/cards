@@ -4,7 +4,7 @@ var  traum=false;
 var bloodP=false;
 var feel=false;
 var enter_yn=false;
-var data;
+var data, stringData='';
 class generalFeeling{ 
   constructor(agent){
     this.agent=agent;
@@ -64,8 +64,8 @@ class generalFeeling{
     //const timepain=timeOfPain.length>0
     //const ghavaFever=havaFever.length>0
 
-
-
+    stringData+=this.agent.query+" ";
+    
     let feeling = this.agent.parameters['feeling'];  
     let gotfeeling=feeling.length>0;
     let bloodPressure=this.agent.parameters['bloodPressure'];
@@ -108,7 +108,7 @@ class generalFeeling{
       }   
     else if(hadTrauma && !gotbloodPressure && !gotfeeling ){
         bloodP=true;
-      this.agent.add(`ok, do you suffer from high blood pressure? if not just tell me if it's higher than normal`);
+      return `Ok, have you tested yout blood pressure lately? if not just tell me if it's higher than normal`;
     }
    else  if(hadTrauma && gotbloodPressure && !gotfeeling ){
     console.log("feel")
@@ -133,7 +133,11 @@ class generalFeeling{
   }
 }
 getData(){
+  console.log("data of general feeling:  ");
     return data;
+}
+getQuery(){
+  return stringData;
 }
 }
 module.exports=generalFeeling

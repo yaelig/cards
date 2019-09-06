@@ -1,59 +1,62 @@
 const appClass=require('../app')
-var data;
+var data,stringData="";
+
 class PersonalDetails{
     constructor(agent){
-        this.agent=agent   
+        this.agent=agent;
+        this.conv=this.agent.conv();
+
+        this.conv.data.name=this.agent.parameters.name;
+        this.conv.data.age=this.agent.parameters.age.number;
+        this.conv.data.gender=this.agent.parameters.gender;
     }
-    foo() {
-        if(this.agent.parameters.name.name1!=undefined)
-        var name = this.agent.parameters.name.name1;
-       else if(this.agent.parameters.name.name2!=undefined)
-        var name = this.agent.parameters.name.name2;
-         else{
-        var name = this.agent.parameters.name.given-name;
-         }
-    const age = this.agent.parameters.age.amount;
-    const gender = this.agent.parameters.gender;
-    const gotname = name==''?0:1
-    const gotage = age==''?0:1
-    const gotgender =gender==''?0:1
+    foo() {    
+        
+       
+     //  console.log(this.conv)
+
+       this.conv.data.name==undefined?this.agent.parameters.name:undefined;
+       this.conv.data.age==undefined?this.agent.parameters.age.number:undefined;
+       this.conv.data.gender==undefined?this.agent.parameters.gender:undefined;
+     
+     stringData+=this.agent.query+" ";
+
+    const name=this.conv.data.name;
+
+    const gotname = this.conv.data.name==undefined?0:1
+    const gotage = this.conv.data.age==undefined?0:1
+    const gotgender =this.conv.data.gender==undefined?0:1
+
+console.log(" gotname, gotage, gotgender "+gotname,gotage,gotgender)
+
     if (gotname && gotage&&gotgender) {
-        data=this.agent.parameters;
-      console.log('worksjsjnd')
-    return `ok ${name}, please describe you'r genereal feeling to me, try to include things like your blood pressure, general feeling and share with me if you have ever experienced a trauma`
+        data=this.conv.data;
+    this.agent.add(`Ok ${name}, Please describe you'r general feeling to me. things like your blood pressure level, a traume you've experienced and generly about how you feel right now`)
     }
     else if (gotname && !gotage&&!gotgender) 
-    return `Ok, ${name}, let me know what is your age and what is your gender`;
+    this.agent.add(`Ok, ${name}, How old are you? and what is you'r gender?`)
     else if (gotname && gotage&&!gotgender) 
-    return `Ok, ${name}, let me know what is your gender`;
+    this.agent.add(`Ok, ${name}, What gender you belong to`)
     else if(gotname && !gotage&&gotgender) 
-    return `Ok, ${name}, let me know what is your age`;
+    this.agent.add(`Ok, ${name}, How old are you?`)
     else if (!gotname && gotage&&gotgender) 
-    return `What's your name please?`;
+    this.agent.add(`What's your name please?`)
     else if (!gotname && !gotage&&gotgender) 
-    return `Didn't copy you'r name and age can you repeat please?`;
+    this.agent.add(`Well dear ${gender}, What is your name and how old are you`)
      else if(!gotname && gotage&&!gotgender) 
-     return 'Let me know what is your name and what is your gender';
-     else (!gotname && !gotage&&!gotgender) 
-     return'Tell me about your self what is your name what is your age and what is your gender';
-     
-        }
+     this.agent.add('Let me know what is your name and what is your gender')
+     else if (!gotname && !gotage&&!gotgender) 
+     this.agent.add(`I want to get to know you before we begin. what is you'r name?`)
+}
         getData(){
             return data;
         }
-        
- add_personal_details(name,age,gender)
-{
-   request({
-  url:'http://localhost:64502/api/personDetails/savePersonDetails',
-  method: 'POST',
-  json: true, body: {name,age,gender}
-  }
-, function(error, response, body){
-  console.log(body);
-});
-}
-        
+        getQuery(){
+            return stringData;
+        }
+        getName(){
+            return conv.data.name;
+        }
 }
 
 module.exports=PersonalDetails;
