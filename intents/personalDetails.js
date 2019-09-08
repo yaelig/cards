@@ -1,36 +1,47 @@
 const appClass=require('../app')
+const fs=require('fs');
 var data,stringData="";
 
 class PersonalDetails{
     constructor(agent){
         this.agent=agent;
         this.conv=this.agent.conv();
-
-        this.conv.data.name=this.agent.parameters.name;
-        this.conv.data.age=this.agent.parameters.age.number;
-        this.conv.data.gender=this.agent.parameters.gender;
     }
     foo() {    
-        
-       
-     //  console.log(this.conv)
+    //console.log(this.conv)
 
-       this.conv.data.name==undefined?this.agent.parameters.name:undefined;
-       this.conv.data.age==undefined?this.agent.parameters.age.number:undefined;
-       this.conv.data.gender==undefined?this.agent.parameters.gender:undefined;
+    console.log("conv.data 1")
+    console.log(this.conv.user.storage)
+    console.log(this.conv.user)
+
+        this.conv.user.storage.name=this.agent.parameters.name;
+        this.conv.user.storage.age=this.agent.parameters.age.number;
+        this.conv.user.storage.gender=this.agent.parameters.gender;
      
+
+    //  this.conv.user.storage.name=(this.conv.user.storage.name=='')?undefined:this.agent.parameters.name;
+    //  this.conv.user.storage.age=(this.conv.user.storage.age=='')?undefined:this.agent.parameters.age.number;
+    //  this.conv.user.storage.gender=(this.conv.user.storage.gender=='')?undefined:this.agent.parameters.gender;
+      
+       console.log("conv.data 2")
+       console.log(this.conv.user.storage)
+
+      
+       const gotname = this.conv.user.storage.name==''?0:1
+       const gotage = this.conv.user.storage.age==''?0:1
+       const gotgender =this.conv.user.storage.gender==''?0:1
+       console.log("2 gotname, gotage, gotgender "+gotname,gotage,gotgender)
+
      stringData+=this.agent.query+" ";
 
-    const name=this.conv.data.name;
+    const name=this.conv.user.storage.name;
+    const gender=this.conv.user.storage.gender;
 
-    const gotname = this.conv.data.name==undefined?0:1
-    const gotage = this.conv.data.age==undefined?0:1
-    const gotgender =this.conv.data.gender==undefined?0:1
+    
 
-console.log(" gotname, gotage, gotgender "+gotname,gotage,gotgender)
 
     if (gotname && gotage&&gotgender) {
-        data=this.conv.data;
+      //  data=this.conv.data;
     this.agent.add(`Ok ${name}, Please describe you'r general feeling to me. things like your blood pressure level, a traume you've experienced and generly about how you feel right now`)
     }
     else if (gotname && !gotage&&!gotgender) 
@@ -60,3 +71,4 @@ console.log(" gotname, gotage, gotgender "+gotname,gotage,gotgender)
 }
 
 module.exports=PersonalDetails;
+

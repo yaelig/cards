@@ -11,7 +11,7 @@ const smokingHabits=require('./intents/smokingHabits')
 const ObesityAndExercise=require('./intents/ObesityAndExercise')
 const HeartRelatedDiseases=require('./intents/HeartRelatedDiseases')
 const Drugs=require('./intents/Drugs')
-const {dialogflow} = require('actions-on-google')
+const {dialogflow,Permission} = require('actions-on-google')
 
 
 const aog = dialogflow({debug: true})
@@ -19,15 +19,16 @@ const aog = dialogflow({debug: true})
 //const aog = dialogflow()
 const app = express()
 
+//console.log("aog + "+ aog)
 app.get('/', (req, res) => res.send('online'))
 
 fs.writeFileSync('user.json',"")
 fs.writeFileSync('queryData',"")
 app.post('/', express.json(), (req, res) => {
 
-  
- const agent = new WebhookClient({ request: req, response: res })
- const serv=new service(agent);
+  const agent = new WebhookClient({ request: req, response: res })
+ 
+ //const serv=new service(agent);
 // let welc=new welcome(agent)
 let personalD=new personalDetails(agent)
 let generalF=new generalFeeling(agent)
@@ -41,7 +42,9 @@ agent.add(welc.foo())
 }
 function personal_details(){
   console.log("request parameters________________")
-personalD.foo()
+
+
+  personalD.foo()
 let data=personalD.getData()
 console.log(data);
 if(data!=undefined){
@@ -125,9 +128,8 @@ fs.writeFileSync('queryData.txt',text)
     temp+=',"smokingHabits":'+dataConverted+'}'
     fs.writeFileSync('user.json',temp)
 
-    let text=fs.readFileSync('queryData.txt');
-text+=smoke.getQuery();
-fs.writeFileSync('queryData.txt',text)
+    let text=fs.readFileSync('queryData.txt');     text+=smoke.getQuery();
+    fs.writeFileSync('queryData.txt',text)
 
     agent.add(`Okay thank's for the information i am passing it to you to see and to you'r 
     doctor. Hope you'd feel better very soon!`)
