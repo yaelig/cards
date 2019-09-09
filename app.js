@@ -1,11 +1,11 @@
 const request = require('request');
+const connect=require('connect')
 var fs = require("fs");
 const express = require('express')
 const service=require('./intents/service')
 const { WebhookClient } = require('dialogflow-fulfillment')
-const familyMedicalHistory=require('./intents/familyMedicalHistory')
-const welcome=require('./intents/welcome')
 const generalFeeling=require('./intents/generalFeeling')
+const welcome =require('./intents/welcome')
 const personalDetails=require('./intents/personalDetails')
 const smokingHabits=require('./intents/smokingHabits')
 const ObesityAndExercise=require('./intents/ObesityAndExercise')
@@ -18,18 +18,20 @@ const aog = dialogflow({debug: true})
 // // Create an app instance
 //const aog = dialogflow()
 const app = express()
-
+var con=connect();
 //console.log("aog + "+ aog)
 app.get('/', (req, res) => res.send('online'))
 
 fs.writeFileSync('user.json',"")
 fs.writeFileSync('queryData',"")
+
 app.post('/', express.json(), (req, res) => {
 
+service.call();
   const agent = new WebhookClient({ request: req, response: res })
  
  //const serv=new service(agent);
-// let welc=new welcome(agent)
+let welc=new welcome(agent)
 let personalD=new personalDetails(agent)
 let generalF=new generalFeeling(agent)
 let hrd=new HeartRelatedDiseases(agent)
@@ -37,14 +39,21 @@ let oae=new ObesityAndExercise(agent)
 let drug=new Drugs(agent)
 let smoke=new smokingHabits(agent)
 
-function welcome(){
+function welcome_func(){
+  console.log("entered welcome func")
 agent.add(welc.foo())
 }
+
 function personal_details(){
-  console.log("request parameters________________")
+  let conv=agent.conv()
+ 
+  console.log("conv.user")
+  console.log(conv.user)
+console.log("app user verification  "+ conv.user.verification)
+console.log("app conv id  "+conv.id)
+console.log("app conv user id  "+conv.user.id)
 
-
-  personalD.foo()
+  personalD.foo(conv)
 let data=personalD.getData()
 console.log(data);
 if(data!=undefined){
@@ -146,8 +155,21 @@ fs.writeFileSync('queryData.txt',text)
     console.log(temp)
   }
 
+  
+// aog.intent('inform.PersonalDetails', (conv) => {
+//   console.log("hiiiiiiiiiiiiiiiiiii")
+//   conv.user.storage.name= "moshjhjhj"; 
+//   conv.ask(`Hi, ${conv.user.storage.name}!.
+//   Please tell me how can I help you? `);
+// });
+
+// app.intent('AboutSC', (conv) => {
+//   conv.ask(`well ${conv.user.storage.name}.  What more would you like to know? `);
+// });
+
+
   let intentMap = new Map()
-  // intentMap.set('Default Welcome Intent',welcome)
+  intentMap.set('Default Welcome Intent',welcome_func)
  intentMap.set('inform.PersonalDetails',personal_details) 
   intentMap.set('inform.GeneralFeeling',general_feeling)
   intentMap.set('inform.HeartRelatedDiseases', diseases)

@@ -5,37 +5,46 @@ var data,stringData="";
 class PersonalDetails{
     constructor(agent){
         this.agent=agent;
-        this.conv=this.agent.conv();
+        this.conv=agent.conv();
     }
-    foo() {    
-    //console.log(this.conv)
-
-    console.log("conv.data 1")
-    console.log(this.conv.user.storage)
-    console.log(this.conv.user)
-
-        this.conv.user.storage.name=this.agent.parameters.name;
-        this.conv.user.storage.age=this.agent.parameters.age.number;
-        this.conv.user.storage.gender=this.agent.parameters.gender;
+    foo(conv) {   
+    
+        let name=this.agent.parameters.name;
+        let age=this.agent.parameters.age['number'];
+        let gender=this.agent.parameters.gender;
+        console.log("conv user storage 1"+JSON.stringify(this.conv.user.storage))
      
+        console.log("name age gender "+name+" " +age+" "+gender)
+        // this.conv.user.storage.name=this.agent.parameters.name;
+        // this.conv.user.storage.age=this.agent.parameters.age.number;
+        // this.conv.user.storage.gender=this.agent.parameters.gender;
+     console.log("this.conv.user.storage.name    "+ this.conv.user.storage.name)
+        this.conv.user.storage.name=(name!=""&&name!=undefined&& this.conv.user.storage.name==undefined)?name:undefined;
+        this.conv.user.storage.age=(age!=''&&age!=undefined&& this.conv.user.storage.age==undefined)?age:undefined;
+        this.conv.user.storage.gender=(gender!=''&&gender!=undefined&& this.conv.user.storage.gender==undefined)?gender:undefined
 
+      console.log("conv user storage 2"+JSON.stringify(this.conv.user.storage))
+     
     //  this.conv.user.storage.name=(this.conv.user.storage.name=='')?undefined:this.agent.parameters.name;
     //  this.conv.user.storage.age=(this.conv.user.storage.age=='')?undefined:this.agent.parameters.age.number;
     //  this.conv.user.storage.gender=(this.conv.user.storage.gender=='')?undefined:this.agent.parameters.gender;
       
        console.log("conv.data 2")
-       console.log(this.conv.user.storage)
-
+       console.log(conv.user.storage)
+       console.log("parameters")
+       console.log(this.agent.parameters)
       
-       const gotname = this.conv.user.storage.name==''?0:1
-       const gotage = this.conv.user.storage.age==''?0:1
-       const gotgender =this.conv.user.storage.gender==''?0:1
+       const gotname = this.conv.user.storage.name==undefined?0:1
+       const gotage = this.conv.user.storage.age==undefined?0:1
+       const gotgender =this.conv.user.storage.gender==undefined?0:1
        console.log("2 gotname, gotage, gotgender "+gotname,gotage,gotgender)
+       console.log("agentaddconv1")
 
+       console.log("agentaddconv2")
      stringData+=this.agent.query+" ";
 
-    const name=this.conv.user.storage.name;
-    const gender=this.conv.user.storage.gender;
+    // const name=this.conv.user.storage.name;
+    // const gender=this.conv.user.storage.gender;
 
     
 
