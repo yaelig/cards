@@ -1,13 +1,10 @@
-const {addToJson}=require('../app')
+const {addToJson}=require('..')
 const yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
 const noPhrases=['no','nope','nah','not','not at all'];
 var drugs, no_drugs;
 var data,stringData="";
 class Drugs{
-    constructor(agent){
-        this.agent=agent;
-        drugs=this.agent.parameters['drugs'];
-        no_drugs=this.agent.parameters.drugs=='no_drugs'?true:false;
+    constructor(){
     }
     drugs_yes(gotDrugs){
       this.gotDrugs=true;

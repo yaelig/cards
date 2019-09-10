@@ -1,11 +1,10 @@
-const app=require('../app')
+const app=require('..')
 const yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
 const noPhrases=['no','nope','nah','not'];
 var data,stringData='';
 var gotExercise,gotObesity
 class ObesityAndExercise{
-  constructor(agent){
-    this.agent=agent;
+  constructor(){
      }
      obesityAndExercise_no(gotExercise,gotObesity){
       if (gotExercise && !gotObesity){

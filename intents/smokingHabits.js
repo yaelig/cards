@@ -3,9 +3,8 @@ const noPhrases=['no','nope','nah','not'];
 var gotSmokingAmount, gotSmokingOften;
 var data,stringData='';
 class smokingHabits{
-  constructor(agent){
-    this.agent=agent;
-     }
+  constructor(){
+  }
      smokingHabits_no(gotSmokingAmount,gotSmokingOften){
       if (gotSmokingAmount && !gotSmokingOften){
         gotSmokingOften=true;

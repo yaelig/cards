@@ -1,72 +1,46 @@
-const appClass=require('../app')
+const appClass=require('..')
 const fs=require('fs');
 var data,stringData="";
 
 class PersonalDetails{
-    constructor(agent){
-        this.agent=agent;
-        this.conv=agent.conv();
+    constructor(){
     }
-    foo(conv) {   
-    
-        let name=this.agent.parameters.name;
-        let age=this.agent.parameters.age['number'];
-        let gender=this.agent.parameters.gender;
-        console.log("conv user storage 1"+JSON.stringify(this.conv.user.storage))
-     
-        console.log("name age gender "+name+" " +age+" "+gender)
-        // this.conv.user.storage.name=this.agent.parameters.name;
-        // this.conv.user.storage.age=this.agent.parameters.age.number;
-        // this.conv.user.storage.gender=this.agent.parameters.gender;
-     console.log("this.conv.user.storage.name    "+ this.conv.user.storage.name)
-        this.conv.user.storage.name=(name!=""&&name!=undefined&& this.conv.user.storage.name==undefined)?name:undefined;
-        this.conv.user.storage.age=(age!=''&&age!=undefined&& this.conv.user.storage.age==undefined)?age:undefined;
-        this.conv.user.storage.gender=(gender!=''&&gender!=undefined&& this.conv.user.storage.gender==undefined)?gender:undefined
+    foo(agent,conv) {   
+        let name=agent.parameters.name;
+        let age=agent.parameters.age['number'];
+        let gender=agent.parameters.gender;
+     console.log("name age gender "+name+ ' '+age+" "+gender )
+        conv.user.storage.name=(name!=''&&name!=undefined&&conv.user.storage.name==undefined)?name:conv.user.storage.name;
+        conv.user.storage.age=(age!=''&&age!=undefined&&conv.user.storage.age==undefined)?age:conv.user.storage.age;
+        conv.user.storage.gender=(gender!=''&&gender!=undefined&&conv.user.storage.gender==undefined)?gender:conv.user.storage.gender;
 
-      console.log("conv user storage 2"+JSON.stringify(this.conv.user.storage))
-     
-    //  this.conv.user.storage.name=(this.conv.user.storage.name=='')?undefined:this.agent.parameters.name;
-    //  this.conv.user.storage.age=(this.conv.user.storage.age=='')?undefined:this.agent.parameters.age.number;
-    //  this.conv.user.storage.gender=(this.conv.user.storage.gender=='')?undefined:this.agent.parameters.gender;
+      console.log("stor " +JSON.stringify(conv.user.storage))
+   
       
-       console.log("conv.data 2")
-       console.log(conv.user.storage)
-       console.log("parameters")
-       console.log(this.agent.parameters)
-      
-       const gotname = this.conv.user.storage.name==undefined?0:1
-       const gotage = this.conv.user.storage.age==undefined?0:1
-       const gotgender =this.conv.user.storage.gender==undefined?0:1
-       console.log("2 gotname, gotage, gotgender "+gotname,gotage,gotgender)
-       console.log("agentaddconv1")
+       const gotname = conv.user.storage.name==undefined?0:1
+       const gotage = conv.user.storage.age==undefined?0:1
+       const gotgender =conv.user.storage.gender==undefined?0:1
+    console.log("got name age gender "+gotname+" " +gotage+" " +gotgender)
+   
 
-       console.log("agentaddconv2")
-     stringData+=this.agent.query+" ";
-
-    // const name=this.conv.user.storage.name;
-    // const gender=this.conv.user.storage.gender;
-
-    
-
-
-    if (gotname && gotage&&gotgender) {
-      //  data=this.conv.data;
-    this.agent.add(`Ok ${name}, Please describe you'r general feeling to me. things like your blood pressure level, a traume you've experienced and generly about how you feel right now`)
+    if (gotname && gotage&& gotgender) {
+      //  data= conv.data;
+   return (`Ok ${name}, Please describe you'r general feeling to me. things like your blood pressure level, a traume you've experienced and generly about how you feel right now`)
     }
     else if (gotname && !gotage&&!gotgender) 
-    this.agent.add(`Ok, ${name}, How old are you? and what is you'r gender?`)
+   return (`Ok, ${name}, How old are you? and what is you'r gender?`)
     else if (gotname && gotage&&!gotgender) 
-    this.agent.add(`Ok, ${name}, What gender you belong to`)
+    return(`Ok, ${name}, What gender you belong to`)
     else if(gotname && !gotage&&gotgender) 
-    this.agent.add(`Ok, ${name}, How old are you?`)
+    return(`Ok, ${name}, How old are you?`)
     else if (!gotname && gotage&&gotgender) 
-    this.agent.add(`What's your name please?`)
+    return(`What's your name please?`)
     else if (!gotname && !gotage&&gotgender) 
-    this.agent.add(`Well dear ${gender}, What is your name and how old are you`)
+    return(`Well dear ${gender}, What is your name and how old are you`)
      else if(!gotname && gotage&&!gotgender) 
-     this.agent.add('Let me know what is your name and what is your gender')
+     return('Let me know what is your name and what is your gender')
      else if (!gotname && !gotage&&!gotgender) 
-     this.agent.add(`I want to get to know you before we begin. what is you'r name?`)
+     return(`I want to get to know you before we begin. what is you'r name?`)
 }
         getData(){
             return data;

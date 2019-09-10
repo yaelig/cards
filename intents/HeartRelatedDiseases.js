@@ -1,21 +1,10 @@
-const {addToJson}=require('../app')
+const {addToJson}=require('..')
 var yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
 var noPhrases=['no','nope','nah','not','not at all'];
 var data,stringData='';
 var diabetes,cholesterol,heart_disease,no_diabetes,no_cholesterol,no_heart_disease;
 class HeartRealtedDiseases{
-    constructor(agent){
-        this.agent=agent;
-        this.conv=this.agent.conv();//instance of actions-on-google
-        // this.conv.data.diabetes=this.agent.parameters.diabetes;
-        // this.conv.data.cholesterol=this.agent.parameters.cholesterol;
-        // this.conv.data.heart_disease=this.agent.parameters.heart_disease;
-
-        //  no_diabetes=this.agent.parameters.diabetes=='no_diabetes'?true:false;
-        //  no_cholesterol=this.agent.parameters.cholesterol=='no_cholesterol'?true:false;
-        //  no_heart_disease=this.agent.parameters.heart_disease=='no_heart_disease'?true:false;
-
-        
+    constructor(){
     }
     heartRelatedDisease_no(gotDiabetes,gotCholesterol,gotHeart_disease){
         if(!gotDiabetes && gotCholesterol&&gotHeart_disease){

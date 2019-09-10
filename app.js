@@ -14,145 +14,62 @@ const Drugs=require('./intents/Drugs')
 const {dialogflow,Permission} = require('actions-on-google')
 
 
-const aog = dialogflow({debug: true})
+
+
 // // Create an app instance
 //const aog = dialogflow()
 const app = express()
-var con=connect();
-//console.log("aog + "+ aog)
-app.get('/', (req, res) => res.send('online'))
 
-fs.writeFileSync('user.json',"")
-fs.writeFileSync('queryData',"")
+const aog = dialogflow({debug: true})
+app.get('/', (req, res) => r)
 
 app.post('/', express.json(), (req, res) => {
-
-service.call();
+  
   const agent = new WebhookClient({ request: req, response: res })
+  const conv=agent.conv();
  
- //const serv=new service(agent);
 let welc=new welcome(agent)
-let personalD=new personalDetails(agent)
-let generalF=new generalFeeling(agent)
-let hrd=new HeartRelatedDiseases(agent)
-let oae=new ObesityAndExercise(agent)
-let drug=new Drugs(agent)
-let smoke=new smokingHabits(agent)
+let personalD=new personalDetails()
+let generalF=new generalFeeling()
+let hrd=new HeartRelatedDiseases()
+let oae=new ObesityAndExercise()
+let drug=new Drugs()
+let smoke=new smokingHabits()
 
 function welcome_func(){
-  console.log("entered welcome func")
-agent.add(welc.foo())
+  agent.add(welc.foo())
 }
 
 function personal_details(){
-  let conv=agent.conv()
- 
-  console.log("conv.user")
-  console.log(conv.user)
-console.log("app user verification  "+ conv.user.verification)
-console.log("app conv id  "+conv.id)
-console.log("app conv user id  "+conv.user.id)
-
-  personalD.foo(conv)
-let data=personalD.getData()
-console.log(data);
-if(data!=undefined){
-  console.log('yes it is undsdgf')
-let dataConverted = JSON.stringify(data);
-let temp=fs.readFileSync('user.json');
-temp+='{"personalDetails":'+dataConverted
-fs.writeFileSync('user.json',temp)
-
-let text=fs.readFileSync('queryData.txt');
-text+=personalD.getQuery();
-fs.writeFileSync('queryData.txt',text)
-}
-
-// const mosehehe=JSON.parse(fs.readFileSync('user.json'))
-// console.log('personal details jasons from function'+JSON.stringify(mosehehe))
+  conv.ask(personalD.foo(agent,conv))
+  agent.add(conv)
 }
 function general_feeling(){
-  agent.add(generalF.foo())
-    let data=generalF.getData()
-     if(data!=undefined){
-  let dataConverted = JSON.stringify(data);
-  let temp=fs.readFileSync('user.json');
-  temp+=',"generalFeeling":'+dataConverted
-  fs.writeFileSync('user.json',temp)
-
-  let text=fs.readFileSync('queryData.txt');
-text+=generalF.getQuery();
-fs.writeFileSync('queryData.txt',text)
-  }
+  conv.ask(generalF.foo(agnet,conv))
+  agent.add(conv)
 }
 function diseases(){
-  agent.add(hrd.foo())
-  let data=hrd.getData()
-  if(data!=undefined){
-  let dataConverted = JSON.stringify(data);
-  let temp=fs.readFileSync('user.json');
-  temp+=',"heartRelatedDiseases":'+dataConverted
-  fs.writeFileSync('user.json',temp)
-
-  let text=fs.readFileSync('queryData.txt');
-text+=hrd.getQuery();
-fs.writeFileSync('queryData.txt',text)
-  }
+  conv.ask(hrd.foo(agent,conv))
+  agent.add(conv)
 }
   function obesity () {
-   agent.add(oae.foo())
-   let data=oae.getData()
-   if(data!=undefined){
-   let dataConverted = JSON.stringify(data);
-   let temp=fs.readFileSync('user.json');
-   temp+=',"obesityAndExercise":'+dataConverted
-   fs.writeFileSync('user.json',temp)
-
-   let text=fs.readFileSync('queryData.txt');
-text+=oae.getQuery();
-fs.writeFileSync('queryData.txt',text)
-   }
-  }
+  conv.ask(oae.foo(agent,conv))
+  agent.add(conv)
+}
 
   function drugs(){    
-    agent.add(drug.foo())
-    let data=drug.getData()
-    if(data!=undefined){
-    let dataConverted = JSON.stringify(data);
-    let temp=fs.readFileSync('user.json');
-    temp+=',"drugs":'+dataConverted
-    fs.writeFileSync('user.json',temp)
-
-    let text=fs.readFileSync('queryData.txt');
-text+=drug.getQuery();
-fs.writeFileSync('queryData.txt',text)
-    }
+    conv.ask(drug.foo(agent,conv))
+    agent.add(conv)
   }
   function smoking(){
-    agent.add(smoke.foo())
-    let data=smoke.getData()
-    if(data!=undefined){
-    let dataConverted=JSON.stringify(data);
-    let temp=fs.readFileSync('user.json');
-    temp+=',"smokingHabits":'+dataConverted+'}'
-    fs.writeFileSync('user.json',temp)
-
-    let text=fs.readFileSync('queryData.txt');     text+=smoke.getQuery();
-    fs.writeFileSync('queryData.txt',text)
-
+   conv.ask(smoke.foo(agent,conv))
+   agent.add(conv)
     agent.add(`Okay thank's for the information i am passing it to you to see and to you'r 
     doctor. Hope you'd feel better very soon!`)
-    }
   }
   function end(){
-    console.log('endOfConversation ')
-    //let dataConverted = JSON.stringify(data);
-    let temp=fs.readFileSync('user.json');
-    temp+=',{"smokingHabits":"not_smoke"}}'
-    fs.writeFileSync('user.json',temp)
-    agent.add(`Okay thank's for the information i am passing it to you to see and to you'r 
-    doctor. Hope you'd feel better very soon!`)
-    console.log(temp)
+    console.log('endOfConversation')
+    service.call()
   }
 
   
@@ -168,7 +85,8 @@ fs.writeFileSync('queryData.txt',text)
 // });
 
 
-  let intentMap = new Map()
+
+  let intentMap = new Map()  
   intentMap.set('Default Welcome Intent',welcome_func)
  intentMap.set('inform.PersonalDetails',personal_details) 
   intentMap.set('inform.GeneralFeeling',general_feeling)
@@ -180,7 +98,7 @@ fs.writeFileSync('queryData.txt',text)
   intentMap.set('inform.SmokingHabits',smoking)
   intentMap.set('EndOfConversation',end)
   agent.handleRequest(intentMap)
-})
+ })
 
 module.exports={
   add_user:function(){

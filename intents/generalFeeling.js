@@ -6,8 +6,7 @@ var feel=false;
 var enter_yn=false;
 var data, stringData='';
 class generalFeeling{ 
-  constructor(agent){
-    this.agent=agent;
+  constructor(){
      }
   blood_trauma_feel_yes(hadTrauma,gotbloodPressure,gotfeeling)
     {     console.log("yesssssss")
@@ -63,7 +62,7 @@ class generalFeeling{
     //const gotpainLevel=painLevel.length>0
     //const timepain=timeOfPain.length>0
     //const ghavaFever=havaFever.length>0
-
+console.log("user storage "+JSON.stringify(this.agent.conv().user.storage))
     stringData+=this.agent.query+" ";
     
     let feeling = this.agent.parameters['feeling'];  
