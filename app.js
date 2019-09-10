@@ -45,7 +45,7 @@ function personal_details(){
   agent.add(conv)
 }
 function general_feeling(){
-  conv.ask(generalF.foo(agnet,conv))
+  conv.ask(generalF.foo(agent,conv))
   agent.add(conv)
 }
 function diseases(){

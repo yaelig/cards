@@ -1,79 +1,66 @@
-const yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
-const noPhrases=['no','nope','nah','not'];
-var gotSmokingAmount, gotSmokingOften;
-var data,stringData='';
+
 class smokingHabits{
   constructor(){
+   
   }
-     smokingHabits_no(gotSmokingAmount,gotSmokingOften){
-      if (gotSmokingAmount && !gotSmokingOften){
-        gotSmokingOften=true;
-        this.agent.parameters['SmokingOften']='false'
-      }else if(!gotSmokingAmount && gotSmokingOften){
-        this.agent.parameters['SmokingAmount']='false'
-         gotSmokingAmount= this.agent.parameters.exercise=='false'?true:false
+  foo(agent,conv) {
+      
+      const smokingAmount=agent.parameters.smokingAmount;
+      const SmokingOften=agent.parameters.SmokingOften;
+      const SmokingType=agent.parameters.SmokingType;
+
+      const no_smokingAmount= agent.parameters.no_smokingAmount;
+      const no_SmokingOften= agent.parameters.no_SmokingOften;
+      const no_SmokingType= agent.parameters.no_SmokingType;
+      
+      console.log("smoking"+smokingAmount+ ' '+SmokingOften+ ' '+SmokingType)
+conv.user.storage.smokingAmount=(smokingAmount!=''&&smokingAmount!=undefined&&conv.user.storage.smokingAmount==undefined)?smokingAmount:conv.user.storage.smokingAmount;
+conv.user.storage.smokingAmount=(no_smokingAmount!=''&&no_smokingAmount!=undefined)?"no":conv.user.storage.smokingAmount;
+
+conv.user.storage.SmokingOften=(SmokingOften!=''&&SmokingOften!=undefined&&conv.user.storage.SmokingOften==undefined)?SmokingOften:conv.user.storage.SmokingOften;
+conv.user.storage.SmokingOften=(no_SmokingOften!=''&&no_SmokingOften!=undefined)?"no":conv.user.storage.SmokingOften;
+
+conv.user.storage.SmokingType=(SmokingType!=''&&SmokingType!=undefined&&conv.user.storage.SmokingType==undefined)?SmokingType:conv.user.storage.SmokingType;
+conv.user.storage.SmokingType=(no_SmokingType!=''&&no_SmokingType!=undefined)?"no":conv.user.storage.SmokingType;  
+
+const getSmokingType = conv.user.storage.SmokingType==undefined?0:1
+const getSmokingOften = conv.user.storage.SmokingOften==undefined?0:1
+const getsmokingAmount = conv.user.storage.smokingAmount==undefined?0:1 
+
+      if( getSmokingType&& getSmokingOften && !getsmokingAmount) {
+          return(`ho, nooo. how many are you smoking ${SmokingType}?`);
+      } 
+      else 
+      if(getSmokingType && !getSmokingOften && getsmokingAmount){
+          return(`ho nisht! how often are you smoking ${SmokingType}?`);
       }
-     }
-    smokingHabits_yes(gotSmokingAmount,gotSmokingOften){
-  if (gotSmokingAmount && !gotSmokingOften){
-    gotSmokingOften=true;
-    this.agent.parameters['SmokingOften']=this.agent.query
-  //  return 'you are fat'
-  }else if(!gotSmokingAmount && gotSmokingOften){
-    gotSmokingAmount=true;
-    this.agent.parameters['SmokingAmount']=this.agent.query
-  //  return 'you exercise cool!!'
-  }
- }
-
-     foo() {     
-       stringData+=this.agent.query+' ';
-         console.log('agents parameters: ')
-         console.log(this.agent.parameters)
-        const smokingAmount=this.agent.parameters.smokingAmount;
-        console.log("smoking amount of agent: "+this.agent.parameters.SmokingAmount)
-        const smokingOften=this.agent.parameters.SmokingOften;
- 
-        const no_smokingAmount=this.agent.parameters.SmokingAmount=='no_smokingAmount'?true:false;
-        const no_smokingOften=this.agent.parameters.SmokingOften=='no_smokingOften'?true:false;
-
-        gotSmokingAmount=smokingAmount.length>0;
-        gotSmokingOften=smokingOften.length>0;
-
-        if(no_smokingAmount.length>0){
-            smokingAmount='false';
-          }
-          if(no_smokingOften.length>0){
-            smokingOften='false';
-          }
-
-     if(yesPhrases.includes(this.agent.query)){
-       this.smokingHabits_yes(gotSmokingAmount,gotSmokingOften)
-     }else if(noPhrases.includes(this.agent.query)){
-       this.smokingHabits_no(gotSmokingAmount,gotSmokingOften)
-     }
-
-      if(gotSmokingAmount&&gotSmokingOften){
-        data=this.agent.parameters;
-        // const update=require('../app');
-        // update.add_user()  
-        return "";
+      else
+      if(!getSmokingType && getSmokingOften && getsmokingAmount){
+          return(`ho nisht! which kind?`);
       }
-      else if (gotSmokingAmount && !gotSmokingOften) {
-        return 'How often do you smoke?';
-    } else if (!gotSmokingAmount && gotSmokingOften) {
-     return 'How much do you smoke? ';
-    } else {
-      return 'Please describe your smoking habits to me. What do you smoke?, how often and how much?';
-    }
-  }
-  getData()
-  {
-    return data;
-  }
-  getQuery(){
-    return stringData;
-}
-}
+      else
+      if(!getSmokingType && !getSmokingOften && getsmokingAmount){
+          return(`poor you! how often and which kind?`);
+      }
+      else
+      if(!getSmokingType && getSmokingOften && !getsmokingAmount){
+          return(`poor you! how many and which kind?`);
+      }
+      else
+      if(getSmokingType && !getSmokingOften && !getsmokingAmount){
+          return(`poor you! how often and hoe many are you smoking ${SmokingType}?`);
+      }
+      else
+      if(getSmokingType && !getSmokingOften && getsmokingAmount){
+          return(`poor you! how often are you smoking ${SmokingType}?`);
+      }
+      else
+      if(!getSmokingType && !getSmokingOften && !getsmokingAmount){
+          return(`haloo, ma kore?`);
+      }
+      else
+       return(`Okay chamoodi for the information i am passing it to you to see and to you'r 
+        doctor. Hope you'd feel better very soon!`)
+  }}
 
 module.exports=smokingHabits;

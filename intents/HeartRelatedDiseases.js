@@ -1,64 +1,63 @@
-const {addToJson}=require('..')
 var yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
 var noPhrases=['no','nope','nah','not','not at all'];
 var data,stringData='';
-var diabetes,cholesterol,heart_disease,no_diabetes,no_cholesterol,no_heart_disease;
 class HeartRealtedDiseases{
     constructor(){
     }
+
     heartRelatedDisease_no(gotDiabetes,gotCholesterol,gotHeart_disease){
         if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
-          this.gotDiabetes=true;
-          this.agent.parameters['diabetes']='false'
+          gotDiabetes=true;
+          conv.user.storage.diabetes="no";
         }else  if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
           gotCholesterol=true;
-          this.agent.parameters['cholesterol']='false'
+          conv.user.storage.cholesterol="no";
         }else if(gotDiabetes && gotCholesterol&&!gotHeart_disease){
             gotHeart_disease=true;
-            this.agent.parameters['heart_disease']='false'
+            conv.user.storage.heart_disease="no";
         }
        }
       heartRelatedDisease_yes(gotDiabetes,gotCholesterol,gotHeart_disease){
-    if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
-      gotDiabetes=true;
-      this.agent.parameters['diabetes']='diabetes'
-    }else  if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
-      gotCholesterol=true;
-      this.agent.parameters['cholesterol']='cholesterol'
-    }
-    else  if(gotDiabetes && gotCholesterol&&!gotHeart_disease){
-        gotHeart_disease=true;
-        this.agent.parameters['heart_disease']='heart_disease'
-    }
+        if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
+          gotDiabetes=true;
+          conv.user.storage.diabetes="diabetes";
+        }else  if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
+          gotCholesterol=true;
+          conv.user.storage.cholesterol="cholesterol";
+        }else if(gotDiabetes && gotCholesterol&&!gotHeart_disease){
+            gotHeart_disease=true;
+            conv.user.storage.heart_disease="heart disease";
+        }
    }
-    foo() {
-      stringData+=this.agent.query+" ";
-    
-      this.conv.data.diabetes===undefined?this.agent.parameters.diabetes:undefined;
-      this.conv.data.cholesterol===undefined?this.agent.parameters.cholesterol:undefined;
-      this.conv.data.heart_disease===undefined?this.agent.parameters.heart_disease:undefined;
+    foo(agent,conv) {
 
-     const gotDiabetes= this.conv.data.diabetes==undefined?0:1;
-     const gotCholesterol=this.conv.data.cholesterol==undefined?0:1;
-     const gotHeart_disease=this.conv.data.heart_disease==undefined?0:1;
+      let diabetes=agent.parameters.diabetes;
+      let cholesterol=agent.parameters.cholesterol;
+      let heart_disease=agent.parameters.heart_disease;
+      let no_diabetes=agent.parameters.no_heart_disease;
+      let no_cholesterol=agent.parameters.no_heart_disease;
+      let no_heart_disease=agent.parameters.no_heart_disease;
+ 
 
-     if(no_diabetes.length){
-       diabetes='flase';
-     }
-     if(no_cholesterol){
-       cholesterol='false';
-     }
-     if(no_heart_disease){
-       heart_disease='false';
-     }
-     if(yesPhrases.includes(this.agent.query)){
-        return this.heartRelatedDisease_yes(gotDiabetes,gotCholesterol,gotHeart_disease)
-       }else if(noPhrases.includes(this.agent.query)){
+      conv.user.storage.diabetes=(diabetes!=''&&diabetes!=undefined&&conv.user.storage.diabetes==undefined)?diabetes:conv.user.storage.diabetes;
+      conv.user.storage.diabetes=(no_diabetes!=''&&no_diabetes!=undefined)?"no":conv.user.storage.diabetes
+      conv.user.storage.cholesterol=(cholesterol!=''&&cholesterol!=undefined&&conv.user.storage.cholesterol==undefined)?cholesterol:conv.user.storage.cholesterol;
+      conv.user.storage.cholesterol=(no_cholesterol!=''&&no_cholesterol!=undefined)?"no":conv.user.storage.cholesterol
+      conv.user.storage.heart_disease=(heart_disease!=''&&heart_disease!=undefined&&conv.user.storage.heart_disease==undefined)?heart_disease:conv.user.storage.heart_disease;
+      conv.user.storage.heart_disease=(no_heart_disease!=''&&no_heart_disease!=undefined)?"no":conv.user.storage.heart_disease
+ 
+      
+     const gotDiabetes = conv.user.storage.diabetes==undefined?0:1
+     const gotCholesterol = conv.user.storage.cholesterol==undefined?0:1
+     const gotHeart_disease =conv.user.storage.heart_disease==undefined?0:1
+
+     if(yesPhrases.includes(agent.query)){
+         this.heartRelatedDisease_yes(gotDiabetes,gotCholesterol,gotHeart_disease)
+       }else if(noPhrases.includes(agent.query)){
          this.heartRelatedDisease_no(gotDiabetes,gotCholesterol,gotHeart_disease)
        }
    
      if(gotDiabetes && gotCholesterol&&gotHeart_disease) {
-     data=this.conv.data;/////change 
         return `Thanks for that, we'll be finished in a bit. Please tell me about your exercise habits, do you exercise at all?, how often? et cetera`
     } else if(gotDiabetes && gotCholesterol&&!gotHeart_disease) {
         return 'Okay, Do you suffer from any specific heart diseses or had experienced a heart attack? please detail';

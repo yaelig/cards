@@ -9,14 +9,13 @@ class PersonalDetails{
         let name=agent.parameters.name;
         let age=agent.parameters.age['number'];
         let gender=agent.parameters.gender;
-     console.log("name age gender "+name+ ' '+age+" "+gender )
+    // console.log("name age gender "+name+ ' '+age+" "+gender )
         conv.user.storage.name=(name!=''&&name!=undefined&&conv.user.storage.name==undefined)?name:conv.user.storage.name;
         conv.user.storage.age=(age!=''&&age!=undefined&&conv.user.storage.age==undefined)?age:conv.user.storage.age;
         conv.user.storage.gender=(gender!=''&&gender!=undefined&&conv.user.storage.gender==undefined)?gender:conv.user.storage.gender;
 
-      console.log("stor " +JSON.stringify(conv.user.storage))
+      //console.log("stor " +JSON.stringify(conv.user.storage))
    
-      
        const gotname = conv.user.storage.name==undefined?0:1
        const gotage = conv.user.storage.age==undefined?0:1
        const gotgender =conv.user.storage.gender==undefined?0:1
