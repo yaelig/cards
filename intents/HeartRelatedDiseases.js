@@ -1,36 +1,36 @@
 var yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
 var noPhrases=['no','nope','nah','not','not at all'];
 var data,stringData='';
-class HeartRealtedDiseases{
+class HeartRelatedDiseases{
     constructor(){
     }
 
     heartRelatedDisease_no(gotDiabetes,gotCholesterol,gotHeart_disease){
         if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
           gotDiabetes=true;
-          conv.user.storage.diabetes="no";
+          conv.data.diabetes="no";
         }else  if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
           gotCholesterol=true;
-          conv.user.storage.cholesterol="no";
+          conv.data.cholesterol="no";
         }else if(gotDiabetes && gotCholesterol&&!gotHeart_disease){
             gotHeart_disease=true;
-            conv.user.storage.heart_disease="no";
+            conv.data.heart_disease="no";
         }
        }
       heartRelatedDisease_yes(gotDiabetes,gotCholesterol,gotHeart_disease){
         if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
           gotDiabetes=true;
-          conv.user.storage.diabetes="diabetes";
+          conv.data.diabetes="diabetes";
         }else  if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
           gotCholesterol=true;
-          conv.user.storage.cholesterol="cholesterol";
+          conv.data.cholesterol="cholesterol";
         }else if(gotDiabetes && gotCholesterol&&!gotHeart_disease){
             gotHeart_disease=true;
-            conv.user.storage.heart_disease="heart disease";
+            conv.data.heart_disease="not specified";
         }
    }
     foo(agent,conv) {
-
+      conv.data=(conv.data==undefined)?{}:conv.data;
       let diabetes=agent.parameters.diabetes;
       let cholesterol=agent.parameters.cholesterol;
       let heart_disease=agent.parameters.heart_disease;
@@ -39,17 +39,17 @@ class HeartRealtedDiseases{
       let no_heart_disease=agent.parameters.no_heart_disease;
  
 
-      conv.user.storage.diabetes=(diabetes!=''&&diabetes!=undefined&&conv.user.storage.diabetes==undefined)?diabetes:conv.user.storage.diabetes;
-      conv.user.storage.diabetes=(no_diabetes!=''&&no_diabetes!=undefined)?"no":conv.user.storage.diabetes
-      conv.user.storage.cholesterol=(cholesterol!=''&&cholesterol!=undefined&&conv.user.storage.cholesterol==undefined)?cholesterol:conv.user.storage.cholesterol;
-      conv.user.storage.cholesterol=(no_cholesterol!=''&&no_cholesterol!=undefined)?"no":conv.user.storage.cholesterol
-      conv.user.storage.heart_disease=(heart_disease!=''&&heart_disease!=undefined&&conv.user.storage.heart_disease==undefined)?heart_disease:conv.user.storage.heart_disease;
-      conv.user.storage.heart_disease=(no_heart_disease!=''&&no_heart_disease!=undefined)?"no":conv.user.storage.heart_disease
+      conv.data.diabetes=(diabetes!=''&&diabetes!=undefined&&conv.data.diabetes==undefined)?diabetes:conv.data.diabetes;
+      conv.data.diabetes=(no_diabetes!=''&&no_diabetes!=undefined)?"no":conv.data.diabetes
+      conv.data.cholesterol=(cholesterol!=''&&cholesterol!=undefined&&conv.data.cholesterol==undefined)?cholesterol:conv.data.cholesterol;
+      conv.data.cholesterol=(no_cholesterol!=''&&no_cholesterol!=undefined)?"no":conv.data.cholesterol
+      conv.data.heart_disease=(heart_disease!=''&&heart_disease!=undefined&&conv.data.heart_disease==undefined)?heart_disease:conv.data.heart_disease;
+      conv.data.heart_disease=(no_heart_disease!=''&&no_heart_disease!=undefined)?"no":conv.data.heart_disease
  
       
-     const gotDiabetes = conv.user.storage.diabetes==undefined?0:1
-     const gotCholesterol = conv.user.storage.cholesterol==undefined?0:1
-     const gotHeart_disease =conv.user.storage.heart_disease==undefined?0:1
+     const gotDiabetes = conv.data.diabetes==undefined?0:1
+     const gotCholesterol = conv.data.cholesterol==undefined?0:1
+     const gotHeart_disease =conv.data.heart_disease==undefined?0:1
 
      if(yesPhrases.includes(agent.query)){
          this.heartRelatedDisease_yes(gotDiabetes,gotCholesterol,gotHeart_disease)
@@ -84,4 +84,4 @@ class HeartRealtedDiseases{
 }
 }
 
-module.exports=HeartRealtedDiseases
+module.exports=HeartRelatedDiseases

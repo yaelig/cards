@@ -1,10 +1,10 @@
-
+const app=require('../app')
 class smokingHabits{
   constructor(){
    
   }
   foo(agent,conv) {
-      
+    conv.data=(conv.data==undefined)?{}:conv.data;
       const smokingAmount=agent.parameters.smokingAmount;
       const SmokingOften=agent.parameters.SmokingOften;
       const SmokingType=agent.parameters.SmokingType;
@@ -14,53 +14,51 @@ class smokingHabits{
       const no_SmokingType= agent.parameters.no_SmokingType;
       
       console.log("smoking"+smokingAmount+ ' '+SmokingOften+ ' '+SmokingType)
-conv.user.storage.smokingAmount=(smokingAmount!=''&&smokingAmount!=undefined&&conv.user.storage.smokingAmount==undefined)?smokingAmount:conv.user.storage.smokingAmount;
-conv.user.storage.smokingAmount=(no_smokingAmount!=''&&no_smokingAmount!=undefined)?"no":conv.user.storage.smokingAmount;
+conv.data.smokingAmount=(smokingAmount!=''&&smokingAmount!=undefined&&conv.data.smokingAmount==undefined)?smokingAmount:conv.data.smokingAmount;
+conv.data.smokingAmount=(no_smokingAmount!=''&&no_smokingAmount!=undefined)?"no":conv.data.smokingAmount;
 
-conv.user.storage.SmokingOften=(SmokingOften!=''&&SmokingOften!=undefined&&conv.user.storage.SmokingOften==undefined)?SmokingOften:conv.user.storage.SmokingOften;
-conv.user.storage.SmokingOften=(no_SmokingOften!=''&&no_SmokingOften!=undefined)?"no":conv.user.storage.SmokingOften;
+conv.data.SmokingOften=(SmokingOften!=''&&SmokingOften!=undefined&&conv.data.SmokingOften==undefined)?SmokingOften:conv.data.SmokingOften;
+conv.data.SmokingOften=(no_SmokingOften!=''&&no_SmokingOften!=undefined)?"no":conv.data.SmokingOften;
 
-conv.user.storage.SmokingType=(SmokingType!=''&&SmokingType!=undefined&&conv.user.storage.SmokingType==undefined)?SmokingType:conv.user.storage.SmokingType;
-conv.user.storage.SmokingType=(no_SmokingType!=''&&no_SmokingType!=undefined)?"no":conv.user.storage.SmokingType;  
+conv.data.SmokingType=(SmokingType!=''&&SmokingType!=undefined&&conv.data.SmokingType==undefined)?SmokingType:conv.data.SmokingType;
+conv.data.SmokingType=(no_SmokingType!=''&&no_SmokingType!=undefined)?"no":conv.data.SmokingType;  
 
-const getSmokingType = conv.user.storage.SmokingType==undefined?0:1
-const getSmokingOften = conv.user.storage.SmokingOften==undefined?0:1
-const getsmokingAmount = conv.user.storage.smokingAmount==undefined?0:1 
+const getSmokingType = conv.data.SmokingType==undefined?0:1
+const getSmokingOften = conv.data.SmokingOften==undefined?0:1
+const getsmokingAmount = conv.data.smokingAmount==undefined?0:1 
 
       if( getSmokingType&& getSmokingOften && !getsmokingAmount) {
-          return(`ho, nooo. how many are you smoking ${SmokingType}?`);
+          return(`Well, how much do you smoke ${SmokingType}?`);
       } 
       else 
       if(getSmokingType && !getSmokingOften && getsmokingAmount){
-          return(`ho nisht! how often are you smoking ${SmokingType}?`);
+          return(`And how often do you smoke ${SmokingType}?`);
       }
       else
       if(!getSmokingType && getSmokingOften && getsmokingAmount){
-          return(`ho nisht! which kind?`);
+          return(`Tell me which type you smoke most frequently? `);
       }
       else
       if(!getSmokingType && !getSmokingOften && getsmokingAmount){
-          return(`poor you! how often and which kind?`);
+          return(`Tell me which type you smoke most frequently? And how often`);
       }
       else
       if(!getSmokingType && getSmokingOften && !getsmokingAmount){
-          return(`poor you! how many and which kind?`);
+          return(`Tell me which type you smoke most frequently? And how much?`);
       }
       else
       if(getSmokingType && !getSmokingOften && !getsmokingAmount){
-          return(`poor you! how often and hoe many are you smoking ${SmokingType}?`);
-      }
-      else
-      if(getSmokingType && !getSmokingOften && getsmokingAmount){
-          return(`poor you! how often are you smoking ${SmokingType}?`);
+          return(`Well, how often and how much do you smoke ${SmokingType}?`);
       }
       else
       if(!getSmokingType && !getSmokingOften && !getsmokingAmount){
-          return(`haloo, ma kore?`);
+          return(`I still need to know a little about your smoking habits. How much and how frequently do you smoke?`);
       }
       else
-       return(`Okay chamoodi for the information i am passing it to you to see and to you'r 
+      if(getSmokingType && getSmokingOften && getsmokingAmount){
+       return(`Okay ${conv.data.name}, thank you for the information i am passing it to you to see and to your 
         doctor. Hope you'd feel better very soon!`)
+      }
   }}
 
 module.exports=smokingHabits;

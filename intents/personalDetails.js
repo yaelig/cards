@@ -5,20 +5,25 @@ var data,stringData="";
 class PersonalDetails{
     constructor(){
     }
-    foo(agent,conv) {   
+    foo(agent,conv) {    
+        console.log("personal details form "+JSON.stringify(conv.data.form))
+        console.log("personal details  "+JSON.stringify(conv.data))
+       // conv.data=(conv.data==undefined)?{}:conv.data;
         let name=agent.parameters.name;
         let age=agent.parameters.age['number'];
         let gender=agent.parameters.gender;
-    // console.log("name age gender "+name+ ' '+age+" "+gender )
-        conv.user.storage.name=(name!=''&&name!=undefined&&conv.user.storage.name==undefined)?name:conv.user.storage.name;
-        conv.user.storage.age=(age!=''&&age!=undefined&&conv.user.storage.age==undefined)?age:conv.user.storage.age;
-        conv.user.storage.gender=(gender!=''&&gender!=undefined&&conv.user.storage.gender==undefined)?gender:conv.user.storage.gender;
+     console.log("name age gender "+name+ ' '+age+" "+gender )
+    
+    // console.log("pdhyhshdd"+conv.data.name)
+        conv.data.name=(name!=''&&name!=undefined&&conv.data.name==undefined)?name:conv.data.name;
+        conv.data.age=(age!=''&&age!=undefined&&conv.data.age==undefined)?age:conv.data.age;
+        conv.data.gender=(gender!=''&&gender!=undefined&&conv.data.gender==undefined)?gender:conv.data.gender;
 
-      //console.log("stor " +JSON.stringify(conv.user.storage))
+      console.log("stor " +JSON.stringify(conv.data))
    
-       const gotname = conv.user.storage.name==undefined?0:1
-       const gotage = conv.user.storage.age==undefined?0:1
-       const gotgender =conv.user.storage.gender==undefined?0:1
+       const gotname = conv.data.name==undefined?0:1
+       const gotage = conv.data.age==undefined?0:1
+       const gotgender =conv.data.gender==undefined?0:1
     console.log("got name age gender "+gotname+" " +gotage+" " +gotgender)
    
 
