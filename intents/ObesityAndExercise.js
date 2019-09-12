@@ -1,9 +1,7 @@
 const yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
 const noPhrases=['no','nope','nah','not'];
-class ObesityAndExercise{
-  constructor(){
-}
-     foo(agent,conv) {  
+module.exports=function(agent,conv) {  
+console.log("obesity and exercise ")
 
       const exercise=agent.parameters.exercise;
       const obesity=agent.parameters.obesity;
@@ -22,13 +20,14 @@ class ObesityAndExercise{
       
       function obesityAndExercise_no()
       {
+        console.log("obesity no")
         if (gotExercise && !gotObesity){
           conv.data.obesity='no';
           gotObesity=true;
         }else if(!gotExercise && gotObesity){
            conv.data.exercise='no';
            gotExercise=true;
-        }
+        }else return 'That does not really make sense to me, please try to be more specific'
        }
       function obesityAndExercise_yes()
       {
@@ -38,7 +37,7 @@ class ObesityAndExercise{
            }else if(!gotExercise && gotObesity){
              gotExercise=true;
              conv.data.exercise='yes- not specified'
-           }
+           }else return 'That does not really make sense to me, please try to be more specific'
       }
        
       if(yesPhrases.includes(agent.query)){
@@ -63,5 +62,3 @@ class ObesityAndExercise{
       return 'Please tell me about your exercise habits';
     }
   }
-}
- module.exports=ObesityAndExercise

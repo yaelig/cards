@@ -1,9 +1,5 @@
 const app=require('../app')
-class smokingHabits{
-  constructor(){
-   
-  }
-  foo(agent,conv) {
+module.exports=function(agent,conv) {
     conv.data=(conv.data==undefined)?{}:conv.data;
       const smokingAmount=agent.parameters.smokingAmount;
       const SmokingOften=agent.parameters.SmokingOften;
@@ -56,9 +52,9 @@ const getsmokingAmount = conv.data.smokingAmount==undefined?0:1
       }
       else
       if(getSmokingType && getSmokingOften && getsmokingAmount){
-       return(`Okay ${conv.data.name}, thank you for the information i am passing it to you to see and to your 
-        doctor. Hope you'd feel better very soon!`)
+       const endOfConversation=require('./EndOfConversation')
+       endOfConversation(agent,conv)
+    //    return(`Okay ${conv.data.name}, thank you for the information i am passing it to you to see and to your 
+    //     doctor. Hope you'd feel better very soon!`)
       }
-  }}
-
-module.exports=smokingHabits;
+}

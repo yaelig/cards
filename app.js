@@ -2,7 +2,6 @@ const request = require('request');
 const connect=require('connect')
 var fs = require("fs");
 const express = require('express')
-const service=require('./intents/service')
 const { WebhookClient } = require('dialogflow-fulfillment')
 const generalFeeling=require('./intents/generalFeeling')
 const welcome =require('./intents/welcome')
@@ -11,12 +10,23 @@ const smokingHabits=require('./intents/smokingHabits')
 const ObesityAndExercise=require('./intents/ObesityAndExercise')
 const HeartRelatedDiseases=require('./intents/HeartRelatedDiseases')
 const Drugs=require('./intents/Drugs')
-const {dialogflow,Permission,SignIn} = require('actions-on-google')
+const service=require('./intents/service')
+const {dialogflow,Permission,SignIn,actionssdk} = require('actions-on-google')
 
+yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right']
+noPhrases=['no','nope','nah','not','not at all']
 
-// // Create an app instance
-//const aog = dialogflow()
 const app = express()
+const ssdk=actionssdk();
+ssdk.intent('actions.intent.TEXT',(conv, input)=> {
+  console.log("TEXT")
+  conv.ask('Hi, how is it going?')
+  conv.ask(`Here's a picture of a cat`)
+  conv.ask(new Image({
+    url: 'https://developers.google.com/web/fundamentals/accessibility/semantics-builtin/imgs/160204193356-01-cat-500.jpg',
+    alt: 'A cat',
+  }))
+})
 
 const aog = dialogflow({debug: true})
 app.get('/', (req, res) => r)
@@ -24,131 +34,116 @@ app.get('/', (req, res) => r)
 app.post('/', express.json(), (req, res) => {
   const agent = new WebhookClient({ request: req, response: res })
   const conv=agent.conv();
-
- const token=conv.user.profile.token;
- const shortToken=token.substr(token.length - 20); 
- const userId=shortToken+"$"+Date.now()
- module.exports = { userId : userId };
- console.log("user id  __________________________________________")
- console.log(userId)
-let welc=new welcome(agent)
-let personalD=new personalDetails()
-let generalF=new generalFeeling()
-let hrd=new HeartRelatedDiseases()
-let oae=new ObesityAndExercise()
-let drug=new Drugs()
-let smoke=new smokingHabits()
-
-//manage data:
-//conv.data={}
-// conv.data.form=(conv.data.form==undefined)?{}:conv.data.form;
-// conv.data.form.PersonalDetails=(conv.data.form.PersonalDetails==undefined)?{}:conv.data.form.PersonalDetails;
-// conv.data.form.PersonalDetails.name=(conv.data.form.PersonalDetails.name==undefined)?'':conv.data.form.PersonalDetails.name;
-// conv.data.form.GeneralFeeling=(conv.data.form.GeneralFeeling==undefined)?{}:conv.data.form.GeneralFeeling;
-// conv.data.form.HeartRelatedDiseases=(conv.data.form.HeartRelatedDiseases==undefined)?{}:conv.data.form.HeartRelatedDiseases;
-// conv.data.form.ObesityAndExercise=(conv.data.form.ObesityAndExercise==undefined)?{}:conv.data.form.ObesityAndExercise;
-// conv.data.form.Drugs=(conv.data.form.Drugs==undefined)?{}:conv.data.form.Drugs;
-// conv.data.form.smokingHabits=(conv.data.form.smokingHabits==undefined)?{}:conv.data.form.smokingHabits;
-
-  // console.log("form: "+JSON.stringify(conv.data.form))
-  // console.log("user "+JSON.stringify(conv.user))
-
-function signIn(){
+  // const form =conv.data.form;
+  //   module.exports={form:form}
+//  const token=conv.user.profile.token;
+//  const shortToken=token.substr(token.length - 20); 
+//  const userId=shortToken+"$"+Date.now()
+//  module.exports = { userId : userId };
+//  console.log("user id  __________________________________________")
+//  console.log(userId)
   
+  function get_permission_func(){
+    console.log("enterd get permission func ")
+    const explicit = conv.arguments.get('PERMISSION') 
+    const name = conv.user.name
+    agent.add(`Thanks for the permission ${name}`)
+  }
+function signIn(){
   if(conv.user.userVerificationStatus!='VERIFIED'){
   conv.ask(new SignIn());
-  agent.add(conv)}
-  else welcome_func();
-// if ('userId' in conv.data) {
-//   userId = conv.data.userId;
-// } else {
-//   // generateUUID is your function to generate ids.
-//   userId = generateUUID();
-//   conv.data.userId = userId
-// }
-  // if (signin.status !== 'OK') {
-  //   conv.ask('You need to sign in before using the app.');
-  // }
-  //  conv.ask('Great! Thanks for signing in.');
-  //  agent.add(conv)
+  }
 }
+ssdk.intent('actions.intent.TEXT',(conv, input)=> {
+  console.log("TEXT")
+  conv.ask('Hi, how is it going?')
+  conv.ask(`Here's a picture of a cat`)
+  conv.ask(new Image({
+    url: 'https://developers.google.com/web/fundamentals/accessibility/semantics-builtin/imgs/160204193356-01-cat-500.jpg',
+    alt: 'A cat',
+  }))
+})
 function welcome_func(){
-  agent.add(welc.foo())
-}
+  let welc=new welcome(agent)
 
+  // conv.ask(new Permission({
+  //   context: 'Before we begin i need you to allow the following',
+  //   permissions: 'NAME',
+  // })) 
+  // agent.add(conv)
+  // console.log("convusername "+JSON.stringify(conv.user.name))
+  agent.add(welc.foo())
+
+}
+function defaultFallbac(){
+  console.log("hi default fallback")
+  // agent.add("default fall back")
+  const defaultFb=require('./intents/DefaultFallback')
+  console.log(defaultFb(agent,conv));
+  agent.add(defaultFb(agent,conv))
+}
 function personal_details(){
-  conv.ask(personalD.foo(agent,conv))
+  conv.data.currentIntent="personal_details"
+  conv.ask(personalDetails(agent,conv))
   agent.add(conv)
+
 }
 function general_feeling(){
-  conv.ask(generalF.foo(agent,conv))
+  conv.data.currentIntent="general_feeling"
+  conv.ask(generalFeeling(agent,conv))
   agent.add(conv)
 }
 function diseases(){
-  conv.ask(hrd.foo(agent,conv))
+  conv.data.currentIntent="diseases"
+   conv.ask(HeartRelatedDiseases(agent,conv))
   agent.add(conv)
 }
   function obesity () {
-  conv.ask(oae.foo(agent,conv))
+  conv.data.currentIntent="obesity"
+  conv.ask(ObesityAndExercise(agent,conv))
   agent.add(conv)
 }
 
-  function drugs(){    
-    conv.ask(drug.foo(agent,conv))
+  function drugs(){   
+    conv.data.currentIntent="drugs" 
+    conv.ask(Drugs(agent,conv))
     agent.add(conv)
   }
   function smoking(){
-   conv.ask(smoke.foo(agent,conv))
+    conv.data.currentIntent="smoking"
+   conv.ask(smokingHabits(agent,conv))
    agent.add(conv)
-    // agent.add(`Okay thank's for the information i am passing it to you to see and to your
-    // doctor. Hope you'd feel better very soon!`)
    
   }
-function end(){
+  function end(){
     console.log('endOfConversation')
     console.log(JSON.stringify(conv.data))
-    conv.data.form={};
-conv.data.form.PersonalDetails={
-  name:conv.data.name,
-  age:conv.data.age,
-  gender:conv.data.gender
-};
-conv.data.form.GeneralFeeling={
-  bloodPressure:conv.data.bloodPressure,
-  trauma:conv.data.traume,
-  feeling:conv.data.feeling
-};
-conv.data.form.HeartRelatedDiseases={
-  diabetes:conv.data.diabetes,
-  cholesterol:conv.data.cholesterol,
-  heart_disease:conv.data.heart_disease
-};
-conv.data.form.ObesityAndExercise={
-  obesity:conv.data.obesity,
-  exercise:conv.data.exercise
- };
- conv.data.form.Drugs={
-  drugs:conv.data.drugs
- };
-//  if(smoke){ }
- conv.data.form.smokingHabits={
-  smokingAmount:conv.data.smokingAmount,
-  SmokingOften:conv.data.SmokingOften,
-  SmokingType:conv.data.SmokingType
-    };
- 
-  
-    console.log("end-------------------------------------------------------------")
-    console.log(JSON.stringify(conv.data.form))
-    const form =conv.data.form;
-    module.exports={form:form}
-    agent.add("bye")
-      service.call();
-}
+    
+// agent.add(`Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
+// // doctor. Hope you'd feel better very soon!`)
+    service.call()
+    // const endOfConversation=require('./intents/EndOfConversation')
+    // endOfConversation(agent,conv);
+  }
 
+  // module.exports={
+  //   add_user:function(form){
+  //    request({
+  //   url:'http://localhost:64502/api/users/saveUser',
+  //   method: 'POST',
+  //   json: true, body:{id:0,iduser:form.,name:}
+  //   }
+  // , function(error, response, body){
+  //   console.log(body);
+  
+  // });}};
   let intentMap = new Map()  
-  intentMap.set('Sign In',signIn)
+  intentMap.set('SignIn',signIn)
+  // intentMap.set('getPermission', get_permission_func)
+  // intentMap.set('actions.intent.PERMISSION', get_permission_func)
+  // intentMap.set('actions_intent_PERMISSION', get_permission_func)
   intentMap.set('Default Welcome Intent',welcome_func)
+  intentMap.set('Default Fallback Intent',defaultFallbac)
   intentMap.set('inform.PersonalDetails',personal_details) 
   intentMap.set('inform.GeneralFeeling',general_feeling)
   intentMap.set('inform.HeartRelatedDiseases', diseases)
@@ -161,17 +156,8 @@ conv.data.form.ObesityAndExercise={
   agent.handleRequest(intentMap)
  })
 
-// module.exports={
-//   add_user:function(){
-//    request({
-//   url:'http://localhost:64502/api/users/saveUser',
-//   method: 'POST',
-//   json: true, body:JSON.parse(fs.readFileSync('user.json'))
-//   }
-// , function(error, response, body){
-//   console.log(body);
 
-// });}};
+
 
 
 app.listen(process.env.PORT || 8080)

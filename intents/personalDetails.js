@@ -1,11 +1,5 @@
-const appClass=require('..')
-const fs=require('fs');
-var data,stringData="";
-
-class PersonalDetails{
-    constructor(){
-    }
-    foo(agent,conv) {    
+const app=require('../app')
+module.exports=function(agent,conv) {    
         console.log("personal details form "+JSON.stringify(conv.data.form))
         console.log("personal details  "+JSON.stringify(conv.data))
        // conv.data=(conv.data==undefined)?{}:conv.data;
@@ -28,7 +22,7 @@ class PersonalDetails{
    
 
     if (gotname && gotage&& gotgender) {
-      //  data= conv.data;
+     
    return (`Ok ${name}, Please describe you'r general feeling to me. things like your blood pressure level, a traume you've experienced and generly about how you feel right now`)
     }
     else if (gotname && !gotage&&!gotgender) 
@@ -46,16 +40,3 @@ class PersonalDetails{
      else if (!gotname && !gotage&&!gotgender) 
      return(`I want to get to know you before we begin. what is you'r name?`)
 }
-        getData(){
-            return data;
-        }
-        getQuery(){
-            return stringData;
-        }
-        getName(){
-            return conv.data.name;
-        }
-}
-
-module.exports=PersonalDetails;
-

@@ -10,7 +10,7 @@ const data = {
   to: 'mayeruthi@gmail.com',
   subject: 'Patient Diagnose From HeartBot',
  
-  text: 'Testing Diagnose Send!',
+  text: 'Hello. You have just recieved a diagnose of a new patient, in order to watch it click on the link attached, you can as well download it in a pdf format bellow. Regards, Heratbot'+`D:\\homework\\Google BootCamp\\final project\\dialogflow\\bot\\pdfGenerator\\${userId}.html`,
   "o:deliverytime": 'Fri, 6 Jul 2017 18:10:10 -0000',
   attachment:(`D:\\homework\\Google BootCamp\\final project\\dialogflow\\bot\\pdfGenerator\\${userId}.pdf`)
 };

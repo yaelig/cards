@@ -1,43 +1,16 @@
 var yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
 var noPhrases=['no','nope','nah','not','not at all'];
 var data,stringData='';
-class HeartRelatedDiseases{
-    constructor(){
-    }
-
-    heartRelatedDisease_no(gotDiabetes,gotCholesterol,gotHeart_disease){
-        if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
-          gotDiabetes=true;
-          conv.data.diabetes="no";
-        }else  if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
-          gotCholesterol=true;
-          conv.data.cholesterol="no";
-        }else if(gotDiabetes && gotCholesterol&&!gotHeart_disease){
-            gotHeart_disease=true;
-            conv.data.heart_disease="no";
-        }
-       }
-      heartRelatedDisease_yes(gotDiabetes,gotCholesterol,gotHeart_disease){
-        if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
-          gotDiabetes=true;
-          conv.data.diabetes="diabetes";
-        }else  if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
-          gotCholesterol=true;
-          conv.data.cholesterol="cholesterol";
-        }else if(gotDiabetes && gotCholesterol&&!gotHeart_disease){
-            gotHeart_disease=true;
-            conv.data.heart_disease="not specified";
-        }
-   }
-    foo(agent,conv) {
+module.exports=function(agent,conv) {
+      console.log('heart related disesasdhjsd')
       conv.data=(conv.data==undefined)?{}:conv.data;
       let diabetes=agent.parameters.diabetes;
       let cholesterol=agent.parameters.cholesterol;
       let heart_disease=agent.parameters.heart_disease;
-      let no_diabetes=agent.parameters.no_heart_disease;
-      let no_cholesterol=agent.parameters.no_heart_disease;
+      let no_diabetes=agent.parameters.no_diabetes;
+      let no_cholesterol=agent.parameters.no_cholesterol;
       let no_heart_disease=agent.parameters.no_heart_disease;
- 
+      
 
       conv.data.diabetes=(diabetes!=''&&diabetes!=undefined&&conv.data.diabetes==undefined)?diabetes:conv.data.diabetes;
       conv.data.diabetes=(no_diabetes!=''&&no_diabetes!=undefined)?"no":conv.data.diabetes
@@ -46,15 +19,40 @@ class HeartRelatedDiseases{
       conv.data.heart_disease=(heart_disease!=''&&heart_disease!=undefined&&conv.data.heart_disease==undefined)?heart_disease:conv.data.heart_disease;
       conv.data.heart_disease=(no_heart_disease!=''&&no_heart_disease!=undefined)?"no":conv.data.heart_disease
  
-      
      const gotDiabetes = conv.data.diabetes==undefined?0:1
      const gotCholesterol = conv.data.cholesterol==undefined?0:1
      const gotHeart_disease =conv.data.heart_disease==undefined?0:1
+     
+     
+    function heartRelatedDisease_no(){
+      if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
+        gotDiabetes=true;
+        conv.data.diabetes="no";
+      }else  if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
+        gotCholesterol=true;
+        conv.data.cholesterol="no";
+      }else if(gotDiabetes && gotCholesterol&&!gotHeart_disease){
+          gotHeart_disease=true;
+          conv.data.heart_disease="no";
+      }else return 'That does not really make sense to me, please try to be more specific'
+     }
+    function heartRelatedDisease_yes(){
+      if(!gotDiabetes && gotCholesterol&&gotHeart_disease){
+        gotDiabetes=true;
+        conv.data.diabetes="diabetes";
+      }else  if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
+        gotCholesterol=true;
+        conv.data.cholesterol="cholesterol";
+      }else if(gotDiabetes && gotCholesterol&&!gotHeart_disease){
+          gotHeart_disease=true;
+          conv.data.heart_disease="not specified";
+      }else return 'That does not really make sense to me, please try to be more specific'
+    }
 
      if(yesPhrases.includes(agent.query)){
-         this.heartRelatedDisease_yes(gotDiabetes,gotCholesterol,gotHeart_disease)
+         heartRelatedDisease_yes()
        }else if(noPhrases.includes(agent.query)){
-         this.heartRelatedDisease_no(gotDiabetes,gotCholesterol,gotHeart_disease)
+         heartRelatedDisease_no()
        }
    
      if(gotDiabetes && gotCholesterol&&gotHeart_disease) {
@@ -75,13 +73,4 @@ class HeartRelatedDiseases{
         return 'Is there any heart disease or related you suffer from or had in the past? Have you experienced a heart attack?';
     }
   }
-  getData()
-  {
-    return data;
-  }
-  getQuery(){
-    return stringData;
-}
-}
 
-module.exports=HeartRelatedDiseases
