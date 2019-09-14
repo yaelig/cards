@@ -53,8 +53,6 @@ const getsmokingAmount = conv.data.smokingAmount==undefined?0:1
       else
       if(getSmokingType && getSmokingOften && getsmokingAmount){
        const endOfConversation=require('./EndOfConversation')
-       endOfConversation(agent,conv)
-    //    return(`Okay ${conv.data.name}, thank you for the information i am passing it to you to see and to your 
-    //     doctor. Hope you'd feel better very soon!`)
+       return endOfConversation(agent,conv)
       }
 }

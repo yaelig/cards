@@ -9,12 +9,21 @@ module.exports=function(agent,conv) {
       conv.data.drugs=(no_drugs!=''&&no_drugs!=undefined)?"no":conv.data.drugs;
      
       let gotDrugs = conv.data.drugs==undefined?0:1
-    
+
+      function drugs_yes(){
+        gotDrugs=true;
+        conv.data.drugs='yes- not specified'
+      }
+      function drugs_no(){
+           gotDrugs=true;
+           conv.data.drugs="no"
+      }
+
       if(yesPhrases.includes(agent.query)){
-        blood_trauma_feel_yes()
+          drugs_yes()
      }
      else if(noPhrases.includes(agent.query)){
-          blood_trauma_feel_no()
+          drugs_no()
      }   
 
      if(!gotDrugs){

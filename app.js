@@ -34,21 +34,19 @@ app.get('/', (req, res) => r)
 app.post('/', express.json(), (req, res) => {
   const agent = new WebhookClient({ request: req, response: res })
   const conv=agent.conv();
-  // const form =conv.data.form;
-  //   module.exports={form:form}
-//  const token=conv.user.profile.token;
-//  const shortToken=token.substr(token.length - 20); 
-//  const userId=shortToken+"$"+Date.now()
-//  module.exports = { userId : userId };
-//  console.log("user id  __________________________________________")
-//  console.log(userId)
+ const token=conv.user.profile.token;
+ const shortToken=token.substr(token.length - 20); 
+ const userId=shortToken+"$"+Date.now()
+ module.exports = { userId : userId };
+ console.log("user id  __________________________________________")
+ console.log(userId)
   
-  function get_permission_func(){
-    console.log("enterd get permission func ")
-    const explicit = conv.arguments.get('PERMISSION') 
-    const name = conv.user.name
-    agent.add(`Thanks for the permission ${name}`)
-  }
+  // function get_permission_func(){
+  //   console.log("enterd get permission func ")
+  //   const explicit = conv.arguments.get('PERMISSION') 
+  //   const name = conv.user.name
+  //   agent.add(`Thanks for the permission ${name}`)
+  // }
 function signIn(){
   if(conv.user.userVerificationStatus!='VERIFIED'){
   conv.ask(new SignIn());
@@ -71,14 +69,13 @@ function welcome_func(){
   //   permissions: 'NAME',
   // })) 
   // agent.add(conv)
-  // console.log("convusername "+JSON.stringify(conv.user.name))
+  console.log("convusername "+JSON.stringify(conv.user.name))
   agent.add(welc.foo())
 
 }
 function defaultFallbac(){
   console.log("hi default fallback")
-  // agent.add("default fall back")
-  const defaultFb=require('./intents/DefaultFallback')
+   const defaultFb=require('./intents/DefaultFallback')
   console.log(defaultFb(agent,conv));
   agent.add(defaultFb(agent,conv))
 }
@@ -118,10 +115,10 @@ function diseases(){
   function end(){
     console.log('endOfConversation')
     console.log(JSON.stringify(conv.data))
-    
+    const endOfConv=require('./intents/EndOfConversation')
+    endOfConv(agent,conv);
 // agent.add(`Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
 // // doctor. Hope you'd feel better very soon!`)
-    service.call()
     // const endOfConversation=require('./intents/EndOfConversation')
     // endOfConversation(agent,conv);
   }

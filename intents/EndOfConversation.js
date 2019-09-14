@@ -31,8 +31,12 @@ module.exports=function(agent,conv){
       SmokingOften:conv.data.SmokingOften,
       SmokingType:conv.data.SmokingType
         };
-    agent.add(`Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
-    // doctor. Hope you'd feel better very soon!`)
-    service.call()
+        const form=conv.data.form   
+        console.log("form endofconv")
+        console.log(JSON.stringify(form))     
+        service(form)
+    return `Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
+    // doctor. Hope you'd feel better very soon!`
+    
    
 }

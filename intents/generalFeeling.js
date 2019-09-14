@@ -63,7 +63,7 @@ module.exports=function(agent,conv){
     
     if(gottrauma && gotbloodPressure && gotfeeling){
       conv.data.feeling=feelingString;
-          return 'Alright, I need some information about your medical history please,Do you suffer from diabetes? How is your cholesterol? any specific heart diseases?'
+          return 'Alright, I need some information about your medical history please. Do you suffer from diabetes? How is your cholesterol? any specific heart diseases?'
     }
      else if(!gottrauma && !gotbloodPressure && !gotfeeling ){
         return `Ok ${conv.data.name}, Please describe you'r general feeling to me. things like your blood pressure level, a traume you've experienced and generly about how you feel right now`;

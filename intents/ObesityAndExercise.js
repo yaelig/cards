@@ -27,7 +27,11 @@ console.log("obesity and exercise ")
         }else if(!gotExercise && gotObesity){
            conv.data.exercise='no';
            gotExercise=true;
-        }else return 'That does not really make sense to me, please try to be more specific'
+        }else if(gotObesity&&gotExercise){
+          console.log("gotObesity&&gotExercise no phrases")
+          return 'All right, there is one last thing. Do you smoke?'
+        }
+        return 'That does not really make sense to me, please try to be more specific'
        }
       function obesityAndExercise_yes()
       {

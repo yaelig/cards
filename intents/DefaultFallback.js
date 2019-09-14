@@ -8,7 +8,7 @@ module.exports=function(agent,conv){
     if(yesPhrases.includes(agent.query)){
         switch (conv.data.currentIntent){
             case "personal_details":
-                return 'That does not really make sense to me, please try to be more specific'
+                return `That doe's not really make sense to me, please try to be more specific`
             case "general_feeling":
                return generalFeeling(agent,conv);
             case "diseases":
@@ -18,8 +18,8 @@ module.exports=function(agent,conv){
             case "drugs":
               return Drugs(agent,conv);
             case "smoking":
-                return 'That does not really make sense to me, please try to be more specific'
-            default: return "That does not really make sense to me, please try to be more specific"
+                return `That doe's not really make sense to me, please try to be more specific`
+            default: return `That doe's not really make sense to me, please try to be more specific`
           }
 }
 else if(noPhrases.includes(agent.query)){
@@ -43,7 +43,7 @@ else if(noPhrases.includes(agent.query)){
   }
 }   
     switch (conv.data.currentIntent) {
-        case "PersonalDetails":
+        case "personal_details":
             if (conv.data.name == undefined) {
                 return `Please tell me what's your name`
             }
@@ -55,8 +55,8 @@ else if(noPhrases.includes(agent.query)){
                 return `Please tell me what gender do you belong to`
 
             }
-            else return 'How do you feel?'
-        case "generalFeeling":
+            else return `How are you feeling ${conv.data.name}?`
+        case "general_feeling":
             if (conv.data.trauma == undefined) {
                 return `Let's get back to trauma you passed lately`
 
@@ -69,9 +69,7 @@ else if(noPhrases.includes(agent.query)){
                 return `What is your blood pressure ?`
 
             }
-            else return `Let's move on to tell me about heart diseases of yours if there is any`
-
-            break;
+            else return `Let's move on to some information about your mediacl history, tell me about heart diseases of yours if there is any`
         case "diseases":
             if (conv.data.diabetes == undefined) {
                 return `I don't think this has anything to do with your diseases`
@@ -85,7 +83,6 @@ else if(noPhrases.includes(agent.query)){
                 return `I think in order to go back on track i have to know about heart diseases of your's`
 
             }
-          
             break;
         case "obesity":
             if (conv.data.obesity == undefined) {

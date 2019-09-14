@@ -19,9 +19,9 @@ module.exports=function(agent,conv) {
       conv.data.heart_disease=(heart_disease!=''&&heart_disease!=undefined&&conv.data.heart_disease==undefined)?heart_disease:conv.data.heart_disease;
       conv.data.heart_disease=(no_heart_disease!=''&&no_heart_disease!=undefined)?"no":conv.data.heart_disease
  
-     const gotDiabetes = conv.data.diabetes==undefined?0:1
-     const gotCholesterol = conv.data.cholesterol==undefined?0:1
-     const gotHeart_disease =conv.data.heart_disease==undefined?0:1
+     let gotDiabetes = conv.data.diabetes==undefined?0:1
+     let gotCholesterol = conv.data.cholesterol==undefined?0:1
+     let gotHeart_disease =conv.data.heart_disease==undefined?0:1
      
      
     function heartRelatedDisease_no(){
