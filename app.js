@@ -123,17 +123,7 @@ function diseases(){
     // endOfConversation(agent,conv);
   }
 
-  // module.exports={
-  //   add_user:function(form){
-  //    request({
-  //   url:'http://localhost:64502/api/users/saveUser',
-  //   method: 'POST',
-  //   json: true, body:{id:0,iduser:form.,name:}
-  //   }
-  // , function(error, response, body){
-  //   console.log(body);
-  
-  // });}};
+ 
   let intentMap = new Map()  
   intentMap.set('SignIn',signIn)
   // intentMap.set('getPermission', get_permission_func)
