@@ -94,8 +94,6 @@ else if(noPhrases.includes(agent.query)){
 
             }
             else return 'Return to safety and  tell me about drug use'
-
-            break;
         case "drugs":
             if (conv.data.drugs == undefined) {
                 return `Let's get back to the drugs you take`
@@ -103,8 +101,6 @@ else if(noPhrases.includes(agent.query)){
             }
             else return `I don't know what you mean but let's move on to smoking question, do you smoke`
 
-
-            break;
         case "smoking":
             if (conv.data.SmokingOften == undefined) {
                 return `Please tell me how often do you smoke`

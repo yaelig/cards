@@ -4,7 +4,7 @@ module.exports=function(agent,conv) {
         console.log("personal details  "+JSON.stringify(conv.data))
        // conv.data=(conv.data==undefined)?{}:conv.data;
         let name=agent.parameters.name;
-        let age=agent.parameters.age['number'];
+        let age=agent.parameters.age||agent.parameters.age['number'];
         let gender=agent.parameters.gender;
      console.log("name age gender "+name+ ' '+age+" "+gender )
     

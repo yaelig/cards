@@ -17,16 +17,16 @@ yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','rig
 noPhrases=['no','nope','nah','not','not at all']
 
 const app = express()
-const ssdk=actionssdk();
-ssdk.intent('actions.intent.TEXT',(conv, input)=> {
-  console.log("TEXT")
-  conv.ask('Hi, how is it going?')
-  conv.ask(`Here's a picture of a cat`)
-  conv.ask(new Image({
-    url: 'https://developers.google.com/web/fundamentals/accessibility/semantics-builtin/imgs/160204193356-01-cat-500.jpg',
-    alt: 'A cat',
-  }))
-})
+// const ssdk=actionssdk();
+// ssdk.intent('actions.intent.TEXT',(conv, input)=> {
+//   console.log("TEXT")
+//   conv.ask('Hi, how is it going?')
+//   conv.ask(`Here's a picture of a cat`)
+//   conv.ask(new Image({
+//     url: 'https://developers.google.com/web/fundamentals/accessibility/semantics-builtin/imgs/160204193356-01-cat-500.jpg',
+//     alt: 'A cat',
+//   }))
+// })
 
 const aog = dialogflow({debug: true})
 app.get('/', (req, res) => r)
@@ -47,20 +47,21 @@ app.post('/', express.json(), (req, res) => {
   //   const name = conv.user.name
   //   agent.add(`Thanks for the permission ${name}`)
   // }
+
 function signIn(){
   if(conv.user.userVerificationStatus!='VERIFIED'){
   conv.ask(new SignIn());
   }
 }
-ssdk.intent('actions.intent.TEXT',(conv, input)=> {
-  console.log("TEXT")
-  conv.ask('Hi, how is it going?')
-  conv.ask(`Here's a picture of a cat`)
-  conv.ask(new Image({
-    url: 'https://developers.google.com/web/fundamentals/accessibility/semantics-builtin/imgs/160204193356-01-cat-500.jpg',
-    alt: 'A cat',
-  }))
-})
+// ssdk.intent('actions.intent.TEXT',(conv, input)=> {
+//   console.log("TEXT")
+//   conv.ask('Hi, how is it going?')
+//   conv.ask(`Here's a picture of a cat`)
+//   conv.ask(new Image({
+//     url: 'https://developers.google.com/web/fundamentals/accessibility/semantics-builtin/imgs/160204193356-01-cat-500.jpg',
+//     alt: 'A cat',
+//   }))
+// })
 function welcome_func(){
   let welc=new welcome(agent)
 
@@ -113,14 +114,10 @@ function diseases(){
    
   }
   function end(){
-    console.log('endOfConversation')
+    console.log('endOfConversation app')
     console.log(JSON.stringify(conv.data))
     const endOfConv=require('./intents/EndOfConversation')
     endOfConv(agent,conv);
-// agent.add(`Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
-// // doctor. Hope you'd feel better very soon!`)
-    // const endOfConversation=require('./intents/EndOfConversation')
-    // endOfConversation(agent,conv);
   }
 
  

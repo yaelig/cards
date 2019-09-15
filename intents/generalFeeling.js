@@ -30,12 +30,12 @@ module.exports=function(agent,conv){
      
     function blood_trauma_feel_yes()
     {     
-      console.log("general feeling no ")
+      console.log("general feeling yes ")
     if (gotbloodPressure && !gottrauma){
-      conv.data.gottrauma='traumatized';
+      conv.data.trauma='traumatized';
       gottrauma=true;
     }else if(!gotbloodPressure && gottrauma){
-       conv.data.gotbloodPressure='high-not specified';
+       conv.data.bloodPressure='high- not specified';
        gotbloodPressure=true;
     }else return 'That does not really make sense to me, please try to be more specific'
     }
@@ -44,12 +44,12 @@ module.exports=function(agent,conv){
    {
      console.log("general feeling no ")
     if (gotbloodPressure && !gottrauma){
-       gottrauma=true;
      conv.data.trauma='no';
+     gottrauma=true;
     }else if(!gotbloodPressure && gottrauma){
       gotbloodPressure=true;
         conv.data.bloodPressure='no';
-    }else return 'That does not really make sense to me, please try to be more specific'
+    }else return `That doe's not really make sense to me, please try to be more specific`
    }
 
     if(yesPhrases.includes(agent.query)){
