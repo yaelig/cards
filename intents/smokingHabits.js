@@ -19,39 +19,51 @@ conv.data.SmokingOften=(no_SmokingOften!=''&&no_SmokingOften!=undefined)?"no":co
 conv.data.SmokingType=(SmokingType!=''&&SmokingType!=undefined&&conv.data.SmokingType==undefined)?SmokingType:conv.data.SmokingType;
 conv.data.SmokingType=(no_SmokingType!=''&&no_SmokingType!=undefined)?"no":conv.data.SmokingType;  
 
-const getSmokingType = conv.data.SmokingType==undefined?0:1
-const getSmokingOften = conv.data.SmokingOften==undefined?0:1
-const getsmokingAmount = conv.data.smokingAmount==undefined?0:1 
+const gotSmokingType = conv.data.SmokingType==undefined?0:1
+const gotSmokingOften = conv.data.SmokingOften==undefined?0:1
+const gotSmokingAmount = conv.data.smokingAmount==undefined?0:1 
 
-      if( getSmokingType&& getSmokingOften && !getsmokingAmount) {
-          return(`Well, how much do you smoke ${SmokingType}?`);
+if(!conv.data.smoke){
+  console.log("!conv.data.smoke    =true")
+    gotSmokingType=gotSmokingAmount=gotSmokingOften=true;
+}
+
+      if( gotSmokingType&& gotSmokingOften && !gotSmokingAmount) {
+          conv.ask(`Well, how much do you smoke ${SmokingType}?`);
+          return conv;
       } 
       else 
-      if(getSmokingType && !getSmokingOften && getsmokingAmount){
-          return(`And how often do you smoke ${SmokingType}?`);
+      if(gotSmokingType && !gotSmokingOften && gotSmokingAmount){
+        conv.ask(`And how often do you smoke ${SmokingType}?`);
+        return conv;
       }
       else
-      if(!getSmokingType && getSmokingOften && getsmokingAmount){
-          return(`Tell me which type you smoke most frequently? `);
+      if(!gotSmokingType && gotSmokingOften && gotSmokingAmount){
+        conv.ask(`Tell me which type you smoke most frequently? `);
+        return conv;
       }
       else
-      if(!getSmokingType && !getSmokingOften && getsmokingAmount){
-          return(`Tell me which type you smoke most frequently? And how often`);
+      if(!gotSmokingType && !gotSmokingOften && gotSmokingAmount){
+        conv.ask(`Tell me which type you smoke most frequently? And how often`);
+        return conv;
       }
       else
-      if(!getSmokingType && getSmokingOften && !getsmokingAmount){
-          return(`Tell me which type you smoke most frequently? And how much?`);
+      if(!gotSmokingType && gotSmokingOften && !gotSmokingAmount){
+        conv.ask(`Tell me which type you smoke most frequently? And how much?`);
+        return conv;
       }
       else
-      if(getSmokingType && !getSmokingOften && !getsmokingAmount){
-          return(`Well, how often and how much do you smoke ${SmokingType}?`);
+      if(gotSmokingType && !gotSmokingOften && !gotSmokingAmount){
+          conv.ask(`Well, how often and how much do you smoke ${SmokingType}?`); 
+          return conv;
       }
       else
-      if(!getSmokingType && !getSmokingOften && !getsmokingAmount){
-          return(`I still need to know a little about your smoking habits. How much and how frequently do you smoke?`);
+      if(!gotSmokingType && !gotSmokingOften && !gotSmokingAmount){
+        conv.ask(`I need to know a little about your smoking habits. How much and how frequently do you smoke?`);
+        return conv;
       }
       else
-      if(getSmokingType && getSmokingOften && getsmokingAmount){
+      if(gotSmokingType && gotSmokingOften && gotSmokingAmount){
        const endOfConversation=require('./EndOfConversation')
        return endOfConversation(agent,conv)
       }

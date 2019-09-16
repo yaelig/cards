@@ -34,9 +34,10 @@ module.exports=function(agent,conv){
         const form=conv.data.form   
         console.log("form endofconv")
         console.log(JSON.stringify(form))     
-        service(form)
-    return `Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
-    // doctor. Hope you'd feel better very soon!`
+        service(form,conv)
+    conv.ask(`Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
+    // doctor. Hope you'd feel better very soon!`)
+    return conv;
     
    
 }

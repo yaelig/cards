@@ -27,9 +27,12 @@ module.exports=function(agent,conv) {
      }   
 
      if(!gotDrugs){
-     return 'Are there any pills or mediactions you take regularly? if there are please datail';
+     conv.ask('Are there any pills or mediactions you take regularly? if there are please detail');
+     return conv;
     }
      else if(gotDrugs){
-         return 'All right, there is one last thing. Do you smoke?'
+         conv.data.currentIntent='smoking'
+         conv.ask('All right, there is one last thing. Do you smoke?')
+         return conv;
         }
 }

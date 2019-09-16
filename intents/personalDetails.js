@@ -13,7 +13,7 @@ module.exports=function(agent,conv) {
         conv.data.age=(age!=''&&age!=undefined&&conv.data.age==undefined)?age:conv.data.age;
         conv.data.gender=(gender!=''&&gender!=undefined&&conv.data.gender==undefined)?gender:conv.data.gender;
 
-      console.log("stor " +JSON.stringify(conv.data))
+    
    
        const gotname = conv.data.name==undefined?0:1
        const gotage = conv.data.age==undefined?0:1
@@ -21,22 +21,37 @@ module.exports=function(agent,conv) {
     console.log("got name age gender "+gotname+" " +gotage+" " +gotgender)
    
 
-    if (gotname && gotage&& gotgender) {
-     
-   return (`Ok ${name}, Please describe you'r general feeling to me. things like your blood pressure level, a traume you've experienced and generly about how you feel right now`)
+    if (gotname && gotage && gotgender) {
+      conv.data.currentIntent='general_feeling';
+      conv.ask(`Ok ${name}, What is your blood pressure level? if you are not sure exactly just tell me if it is higher than normal`)
+      return conv;
     }
-    else if (gotname && !gotage&&!gotgender) 
-   return (`Ok, ${name}, How old are you? and what is you'r gender?`)
-    else if (gotname && gotage&&!gotgender) 
-    return(`Ok, ${name}, What gender you belong to`)
-    else if(gotname && !gotage&&gotgender) 
-    return(`Ok, ${name}, How old are you?`)
-    else if (!gotname && gotage&&gotgender) 
-    return(`What's your name please?`)
-    else if (!gotname && !gotage&&gotgender) 
-    return(`Well dear ${gender}, What is your name and how old are you`)
-     else if(!gotname && gotage&&!gotgender) 
-     return('Let me know what is your name and what is your gender')
-     else if (!gotname && !gotage&&!gotgender) 
-     return(`I want to get to know you before we begin. what is you'r name?`)
+    else if (gotname && !gotage&&!gotgender) {
+   conv.ask(`Ok, ${name}, How old are you? and what is you'r gender?`)
+   return conv;
+    }
+    else if (gotname && gotage&&!gotgender){ 
+    conv.ask(`Ok, ${name}, What gender you belong to`)
+    return conv;
+    }
+    else if(gotname && !gotage&&gotgender) {
+    conv.ask(`Ok, ${name}, How old are you?`)
+    return conv;
+    }
+    else if (!gotname && gotage&&gotgender) {
+    conv.ask(`What's your name please?`)
+    return conv;
+    }
+    else if (!gotname && !gotage&&gotgender) {
+    conv.ask(`Well dear ${gender}, What is your name and how old are you`)
+    return conv;
+    }
+     else if(!gotname && gotage&&!gotgender){
+     conv.ask('Let me know what is your name and what is your gender')
+     return conv;
+     }
+     else if (!gotname && !gotage&&!gotgender) {
+     conv.ask(`I want to get to know you before we begin. what is you'r name?`)
+     return conv;
+     }
 }

@@ -5,6 +5,7 @@ const ObesityAndExercise=require('./ObesityAndExercise')
 const HeartRelatedDiseases=require('./HeartRelatedDiseases')
 const Drugs=require('./Drugs')
 module.exports=function(agent,conv){
+    console.log("default fallback current intent:   "+conv.data.currentIntent)
     if(yesPhrases.includes(agent.query)){
         switch (conv.data.currentIntent){
             case "personal_details":
@@ -18,16 +19,17 @@ module.exports=function(agent,conv){
             case "drugs":
               return Drugs(agent,conv);
             case "smoking":
-                return `That doe's not really make sense to me, please try to be more specific`
+                conv.data.smoke=true;
+                return smokingHabits(agent,conv);
             default: return `That doe's not really make sense to me, please try to be more specific`
           }
 }
 else if(noPhrases.includes(agent.query)){
   console.log('switch case no')
-  console.log("conv.data.currentIntent   "+conv.data.currentIntent)
+  console.log("default fallback conv.data.currentIntent   "+conv.data.currentIntent)
   switch (conv.data.currentIntent){
     case "personal_details":
-            console.log("no personal details np no ")
+            console.log("no personal details default fallback no ")
         return 'That does not really make sense to me, please try to be more specific'
     case "general_feeling":
        return generalFeeling(agent,conv);
@@ -38,14 +40,15 @@ else if(noPhrases.includes(agent.query)){
     case "drugs":
       return Drugs(agent,conv);
     case "smoking":
-        return 'That does not really make sense to me, please try to be more specific'
+        conv.data.smoke=false;
+       return smokingHabits(agent,conv);
     default: return "That does not really make sense to me, please try to be more specific"
   }
 }   
     switch (conv.data.currentIntent) {
         case "personal_details":
             if (conv.data.name == undefined) {
-                return `Please tell me what's your name`
+                return `I didn't get your name`
             }
             else if (conv.data.age == undefined) {
                 return `How old are you?`
@@ -55,38 +58,29 @@ else if(noPhrases.includes(agent.query)){
                 return `Please tell me what gender do you belong to`
 
             }
-            else return `How are you feeling ${conv.data.name}?`
+            else return `What is your blood pressure level ${conv.data.name}?`
         case "general_feeling":
-            if (conv.data.trauma == undefined) {
-                return `Let's get back to trauma you passed lately`
-
-            }
-            else if (conv.data.feeling == undefined) {
-                return `How do you feel today?`
-
-            }
-            else if (conv.data.bloodPressure == undefined) {
-                return `What is your blood pressure ?`
-
+            if (conv.data.bloodPressure == undefined) {
+                return `What is your blood pressure level?`
             }
             else return `Let's move on to some information about your mediacl history, tell me about heart diseases of yours if there is any`
         case "diseases":
             if (conv.data.diabetes == undefined) {
-                return `I don't think this has anything to do with your diseases`
+                return HeartRelatedDiseases(agent,conv);
 
             }
             else if (conv.data.cholesterol == undefined) {
-                return `Now , can you tell me about your cholesterol ?`
+                return HeartRelatedDiseases(agent,conv);
 
             }
             else if (conv.data.heart_disease == undefined) {
-                return `I think in order to go back on track i have to know about heart diseases of your's`
+                return HeartRelatedDiseases(agent,conv);
 
             }
-            break;
+            else return `Do you take care of your body? I wanna know if you exercise and if you suffer from obesity?`
         case "obesity":
             if (conv.data.obesity == undefined) {
-                return `Please get back to talk about excersice and obesity`
+                return `Let's get back to your exercise habits, Do you exercise at all?`
 
             }
             else if (conv.data.exercise == undefined) {
@@ -99,7 +93,7 @@ else if(noPhrases.includes(agent.query)){
                 return `Let's get back to the drugs you take`
 
             }
-            else return `I don't know what you mean but let's move on to smoking question, do you smoke`
+            else return `I don't know what you mean but let's move on to smoking question. Do you smoke`
 
         case "smoking":
             if (conv.data.SmokingOften == undefined) {
@@ -110,11 +104,11 @@ else if(noPhrases.includes(agent.query)){
 
             }
             else if (conv.data.SmokingType == undefined) {
-                return `Let's get back to what are you smoking`
+                return `I didn't get it, Let's get back to what are you smoking`
 
             }
             else return 'Ok thanks '
         default:
-            "answer the last question"
+            return "Please answer the last question"
     }
 }
