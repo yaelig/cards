@@ -9,9 +9,7 @@ module.exports=function(agent,conv){
       gender:conv.data.gender
     };
     conv.data.form.GeneralFeeling={
-      bloodPressure:conv.data.bloodPressure,
-      trauma:conv.data.traume,
-      feeling:conv.data.feeling
+      bloodPressure:conv.data.bloodPressure
     };
     conv.data.form.HeartRelatedDiseases={
       diabetes:conv.data.diabetes,
@@ -27,7 +25,6 @@ module.exports=function(agent,conv){
      };
     //  if(smoke){ }
      conv.data.form.smokingHabits={
-      smokingAmount:conv.data.smokingAmount,
       SmokingOften:conv.data.SmokingOften,
       SmokingType:conv.data.SmokingType
         };
@@ -36,7 +33,7 @@ module.exports=function(agent,conv){
         console.log(JSON.stringify(form))     
         service(form,conv)
     conv.ask(`Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
-    // doctor. Hope you'd feel better very soon!`)
+    doctor. Hope you'd feel better very soon!`)
     return conv;
     
    

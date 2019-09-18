@@ -4,12 +4,20 @@ const smokingHabits=require('./smokingHabits')
 const ObesityAndExercise=require('./ObesityAndExercise')
 const HeartRelatedDiseases=require('./HeartRelatedDiseases')
 const Drugs=require('./Drugs')
+var yesPhrases=['Yes','yea','yes','yeah','yep','yeap','that is true','true','that is right','right'];
+var noPhrases=['No','no','nope','nah','not','not at all'];
 module.exports=function(agent,conv){
-    console.log("default fallback current intent:   "+conv.data.currentIntent)
+    console.log("default fallback with current intent:   "+conv.data.currentIntent)
     if(yesPhrases.includes(agent.query)){
         switch (conv.data.currentIntent){
             case "personal_details":
-                return `That doe's not really make sense to me, please try to be more specific`
+                conv.ask(`Ummm, We do need some personal details in order to continue`)
+                conv.ask('Moshe, 35 Male',`I'm Avi, 58 years old, Man`,'Sarah, 19, Female')
+                agent.context.set({
+                    'name':'await_personal_details',
+                    'lifespan': 5
+                  });
+                return conv;
             case "general_feeling":
                return generalFeeling(agent,conv);
             case "diseases":
@@ -30,7 +38,9 @@ else if(noPhrases.includes(agent.query)){
   switch (conv.data.currentIntent){
     case "personal_details":
             console.log("no personal details default fallback no ")
-        return 'That does not really make sense to me, please try to be more specific'
+            conv.ask(`Ummm, We do need some personal details in order to continue`)
+            conv.ask('Moshe, 35 Male',`I'm Avi, 58 years old, Man`,'Sarah, 19, Female')
+            return conv;
     case "general_feeling":
        return generalFeeling(agent,conv);
     case "diseases":
@@ -48,26 +58,38 @@ else if(noPhrases.includes(agent.query)){
     switch (conv.data.currentIntent) {
         case "personal_details":
             if (conv.data.name == undefined) {
-                return `I didn't get your name`
+                conv.ask(`I am afraid I didn't get your name, Please try again`)
+                return conv;
             }
             else if (conv.data.age == undefined) {
-                return `How old are you?`
+                conv.ask(`How old are you today?`)
+                return conv;
 
             }
             else if (conv.data.gender == undefined) {
-                return `Please tell me what gender do you belong to`
-
+                conv.ask(`What gender you belong to?`)
+                return conv;
             }
-            else return `What is your blood pressure level ${conv.data.name}?`
+            else {
+                conv.ask(`How is you'r blood pressure ${conv.data.name}? Stress or trauma can affect it badely`)
+                conv.ask(new Suggestions(['I Am stressed','I experienced a trauma','High','Very high','Low','Normal','90-134','80/120']))
+                return conv;
+            }
         case "general_feeling":
             if (conv.data.bloodPressure == undefined) {
-                return `What is your blood pressure level?`
+                conv.ask(`How is you'r blood pressure ${conv.data.name}? Stress or trauma can affect it badely`)
+                conv.ask(new Suggestions(['I Am stressed','I experienced a trauma','High','Very high','Low','Normal','90-134','80/120']))
+                return conv;
             }
-            else return `Let's move on to some information about your mediacl history, tell me about heart diseases of yours if there is any`
+            else {
+                conv.ask(`Let's move on to some information about your medical history, Are there any specific heart diseases you suffer from?`)
+                conv.ask(new Suggestions(['No','Yes','My heart is Alrigh','Had a heart attack','Cardiac catheterization']))
+            }
         case "diseases":
             if (conv.data.diabetes == undefined) {
-                return HeartRelatedDiseases(agent,conv);
-
+                conv.ask('What about the level of sugar in your blood?, Do you suffer from diabetes?')
+                conv.ask(new Suggestions(['No','Yes','In my childhood','Type 1','Type 2','Type 3']))
+                return conv;
             }
             else if (conv.data.cholesterol == undefined) {
                 return HeartRelatedDiseases(agent,conv);
@@ -96,18 +118,21 @@ else if(noPhrases.includes(agent.query)){
             else return `I don't know what you mean but let's move on to smoking question. Do you smoke`
 
         case "smoking":
+            conv.data.defaultfallback='dfb';
+            conv=smokingHabits(agent,conv);
+            if(conv.data.defaultfallback==true){
+                console.log("conv.data.defaultfallback==true")
             if (conv.data.SmokingOften == undefined) {
-                return `Please tell me how often do you smoke`
-            }
-            else if (conv.data.smokingAmount == undefined) {
-                return `Let's get back to your smoking habits`
-
+                conv.ask(`I want to know a little about your smoking habits, What type do you smoke most frequently? How often?`)
+                conv.ask()
+                return conv;
             }
             else if (conv.data.SmokingType == undefined) {
-                return `I didn't get it, Let's get back to what are you smoking`
+                conv.ask(`What do you smoke? You can tell me a name of a brand or so`)
+                return conv;
 
             }
-            else return 'Ok thanks '
+           }else return conv;
         default:
             return "Please answer the last question"
     }

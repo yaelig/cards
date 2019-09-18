@@ -1,5 +1,6 @@
-const yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','right'];
-const noPhrases=['no','nope','nah','not','not at all'];
+const yesPhrases=['Yes','yes','yeah','yep','yeap','that is true','true','that is right','right'];
+const noPhrases=['No','no','nope','nah','not','not at all'];
+const{Suggestions}=require('actions-on-google')
 module.exports=function(agent,conv) {   
      console.log('drugs')
       const drugs=agent.parameters.drugs;
@@ -12,11 +13,11 @@ module.exports=function(agent,conv) {
 
       function drugs_yes(){
         gotDrugs=true;
-        conv.data.drugs='yes- not specified'
+        conv.data.drugs=agent.query;
       }
       function drugs_no(){
            gotDrugs=true;
-           conv.data.drugs="no"
+           conv.data.drugs=agent.query;
       }
 
       if(yesPhrases.includes(agent.query)){
@@ -28,11 +29,14 @@ module.exports=function(agent,conv) {
 
      if(!gotDrugs){
      conv.ask('Are there any pills or mediactions you take regularly? if there are please detail');
+     conv.ask(new Suggestions(['No','Beclomethasone','Hydroxyzine','Triamcinolone','I take some pills']))
      return conv;
     }
      else if(gotDrugs){
+          console.log("entered if gotDrugs")
          conv.data.currentIntent='smoking'
          conv.ask('All right, there is one last thing. Do you smoke?')
-         return conv;
+         conv.ask(new Suggestions(['Yes','No']))
+        return conv;
         }
 }

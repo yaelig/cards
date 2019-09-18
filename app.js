@@ -28,8 +28,8 @@ const app = express()
 //   }))
 // })
 
-const aog = dialogflow({debug: true})
-app.get('/', (req, res) => r)
+const aog = dialogflow({debug: true,clientId: process.env.CLIENT_ID})
+app.get('/', (req, res) => {res.json({success : true}) })
 
 app.post('/', express.json(), (req, res) => {
   const agent = new WebhookClient({ request: req, response: res })
@@ -37,7 +37,7 @@ app.post('/', express.json(), (req, res) => {
  const token=conv.user.profile.token;
  const shortToken=token.substr(token.length - 20); 
  const userId=shortToken+"$"+Date.now()
- module.exports = { userId : userId };
+ module.exports.userId= userId ;
  console.log("user id  __________________________________________")
  console.log(userId)
  console.log("stor " +JSON.stringify(conv.data))
@@ -48,12 +48,33 @@ app.post('/', express.json(), (req, res) => {
   //   agent.add(`Thanks for the permission ${name}`)
   // }
 
+  // aog.middleware(async (conv) => {
+  //   const {email} = conv.user;
+  //   if (email) {
+  //     try {
+  //       const user = await auth.getUserByEmail(email);
+  //       console.log("User   "+user)
+  //       conv.user.ref = dbs.user.doc(user.uid);
+  //     } catch (e) {
+  //       if (e.code !== 'auth/user-not-found') {
+  //         throw e;
+  //       }
+  //       // If the user is not found, create a new Firebase auth user
+  //       // using the email obtained from the Google Assistant
+  //       const user = await auth.createUser({email});
+  //       conv.user.ref = dbs.user.doc(user.uid);
+  //     }
+  //   }
+  // });
+
 function signIn(){
   if(conv.user.userVerificationStatus!='VERIFIED'){
   conv.ask(new SignIn());
   }
 } 
 function welcome_func(){
+  console.log(JSON.stringify(agent.context))
+  conv.data.currentIntent='personal_details';
   agent.add(welcome(conv));
   // conv.ask(new Permission({
   //   context: 'Before we begin i need you to allow the following',
@@ -101,6 +122,7 @@ function diseases(){
   function smoking(){
     conv.data.currentIntent="smoking"
    //conv.ask(smokingHabits(agent,conv))
+   console.log("smoking function app")
    agent.add(smokingHabits(agent,conv))
    
   }
@@ -131,9 +153,7 @@ function diseases(){
   agent.handleRequest(intentMap)
  })
 
-
-
-
+module.exports.app=app;
 
 app.listen(process.env.PORT || 8080)
 
