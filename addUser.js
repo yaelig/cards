@@ -17,9 +17,9 @@ module.exports=function(userId,form,systolic,diastolic){
   score+=10;
   if(form.smokingHabits.SmokingOften!=undefined)
   score+=10;
-
+   name=form.PersonalDetails.name;
   request({
-    url:'http://localhost:64502/api/user1',
+    url:'http://localhost:64502/api/post',
     method: 'POST',
     json: true, body:{userId,name,score}
     }

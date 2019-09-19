@@ -1,6 +1,3 @@
-// const request = require('request');
-// const connect=require('connect')
-// var fs = require("fs");
 const express = require('express')
 const { WebhookClient } = require('dialogflow-fulfillment')
 const generalFeeling=require('./intents/generalFeeling')
@@ -17,16 +14,6 @@ yesPhrases=['yes','yeah','yep','yeap','that is true','true','that is right','rig
 noPhrases=['no','nope','nah','not','not at all']
 
 const app = express()
-// const ssdk=actionssdk();
-// ssdk.intent('actions.intent.TEXT',(conv, input)=> {
-//   console.log("TEXT")
-//   conv.ask('Hi, how is it going?')
-//   conv.ask(`Here's a picture of a cat`)
-//   conv.ask(new Image({
-//     url: 'https://developers.google.com/web/fundamentals/accessibility/semantics-builtin/imgs/160204193356-01-cat-500.jpg',
-//     alt: 'A cat',
-//   }))
-// })
 
 const aog = dialogflow({debug: true,clientId: process.env.CLIENT_ID})
 app.get('/', (req, res) => {res.json({success : true}) })
@@ -38,8 +25,7 @@ app.post('/', express.json(), (req, res) => {
  const shortToken=token.substr(token.length - 20); 
  const userId=shortToken+"$"+Date.now()
  module.exports.userId= userId ;
- console.log("user id  __________________________________________")
- console.log(userId)
+ console.log("user id: "+userId)
  console.log("stor " +JSON.stringify(conv.data))
   // function get_permission_func(){
   //   console.log("enterd get permission func ")
@@ -47,81 +33,60 @@ app.post('/', express.json(), (req, res) => {
   //   const name = conv.user.name
   //   agent.add(`Thanks for the permission ${name}`)
   // }
-
-  // aog.middleware(async (conv) => {
-  //   const {email} = conv.user;
-  //   if (email) {
-  //     try {
-  //       const user = await auth.getUserByEmail(email);
-  //       console.log("User   "+user)
-  //       conv.user.ref = dbs.user.doc(user.uid);
-  //     } catch (e) {
-  //       if (e.code !== 'auth/user-not-found') {
-  //         throw e;
-  //       }
-  //       // If the user is not found, create a new Firebase auth user
-  //       // using the email obtained from the Google Assistant
-  //       const user = await auth.createUser({email});
-  //       conv.user.ref = dbs.user.doc(user.uid);
-  //     }
-  //   }
-  // });
-
-function signIn(){
-  if(conv.user.userVerificationStatus!='VERIFIED'){
-  conv.ask(new SignIn());
-  }
+  function signIn(){
+    console.log("entered sign in ")
+     console.log("conv.user.userVerificationStatus   "+JSON.stringify(conv.user))
+   if(conv.user.userVerificationStatus!='VERIFIED'){
+     conv.ask(new SignIn('In order to send you the form at the end of conversation'));
+     console.log("eMail   "+JSON.stringify(agent.conv().user.email))
+    }
+  else conv.ask("you are signed")
+  agent.add(conv);
 } 
 function welcome_func(){
+  console.log('entered welcome func ')
   console.log(JSON.stringify(agent.context))
+  conv.data.qls=0;
   conv.data.currentIntent='personal_details';
-  agent.add(welcome(conv));
-  // conv.ask(new Permission({
-  //   context: 'Before we begin i need you to allow the following',
-  //   permissions: 'NAME',
-  // })) 
-  // agent.add(conv)
-  console.log("convusername "+JSON.stringify(conv.user.name))
-
-}
+  agent.add(welcome(conv))
+ }
 function defaultFallbac(){
   console.log("hi default fallback function at app")
   conv.data.currentIntent==undefined?"personal_details":conv.data.currentIntent;
   console.log("current intent from app "+conv.data.currentIntent)
    const defaultFb=require('./intents/DefaultFallback')
- // console.log(defaultFb(agent,conv));
   agent.add(defaultFb(agent,conv))
 }
 function personal_details(){
+  conv.data.qls=0;
   conv.data.currentIntent="personal_details"
-  //conv.ask(personalDetails(agent,conv))
   agent.add(personalDetails(agent,conv))
 
 }
 function general_feeling(){
+  conv.data.qls=0;
   conv.data.currentIntent="general_feeling"
-  //conv.ask(generalFeeling(agent,conv))
   agent.add(generalFeeling(agent,conv))
 }
 function diseases(){
+  conv.data.qls=0;
   conv.data.currentIntent="diseases"
- //  conv.ask(HeartRelatedDiseases(agent,conv))
   agent.add(HeartRelatedDiseases(agent,conv))
 }
   function obesity () {
+    conv.data.qls=0;
   conv.data.currentIntent="obesity"
-  //conv.ask(ObesityAndExercise(agent,conv))
   agent.add(ObesityAndExercise(agent,conv))
 }
 
   function drugs(){   
+    conv.data.qls=0;
     conv.data.currentIntent="drugs" 
-    //conv.ask(Drugs(agent,conv))
     agent.add(Drugs(agent,conv))
   }
   function smoking(){
+    conv.data.qls=0;
     conv.data.currentIntent="smoking"
-   //conv.ask(smokingHabits(agent,conv))
    console.log("smoking function app")
    agent.add(smokingHabits(agent,conv))
    
@@ -135,10 +100,9 @@ function diseases(){
 
  
   let intentMap = new Map()  
-  intentMap.set('SignIn',signIn)
+  intentMap.set('SIGN_IN',signIn)
   // intentMap.set('getPermission', get_permission_func)
   // intentMap.set('actions.intent.PERMISSION', get_permission_func)
-  // intentMap.set('actions_intent_PERMISSION', get_permission_func)
   intentMap.set('Default Welcome Intent',welcome_func)
   intentMap.set('Default Fallback Intent',defaultFallbac)
   intentMap.set('inform.PersonalDetails',personal_details) 

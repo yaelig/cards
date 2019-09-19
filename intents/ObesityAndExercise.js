@@ -2,6 +2,7 @@ const yesPhrases=['Yes','yes','yeah','yep','yeap','that is true','true','that is
 const noPhrases=['No','no','nope','nah','not'];
 const {Suggestions}=require('actions-on-google')
 module.exports=function(agent,conv) {  
+  conv.data.qls=0;
 console.log("obesity and exercise ")
 
       const exercise=agent.parameters.exercise;
@@ -95,7 +96,7 @@ console.log("obesity and exercise ")
     }
     else
    {
-      conv.ask(`Thank's, we'll be finished in a bit. Please tell me about your exercise habits. Do you exercise at all?`);
+      conv.ask(`Thank's, we'll be finished soon. Please tell me about your exercise habits. Do you exercise at all?`);
       conv.ask(new Suggestions(['I go to the gym','I run sometimes','I like walking','Jogging very often']))
       return conv;
     }

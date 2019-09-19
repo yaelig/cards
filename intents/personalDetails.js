@@ -1,6 +1,7 @@
 const app=require('../app')
 const{Suggestions}=require('actions-on-google')
 module.exports=function(agent,conv) {    
+  conv.data.qls=0;
         console.log("personal details form "+JSON.stringify(conv.data.form))
         console.log("personal details  "+JSON.stringify(conv.data))
        // conv.data=(conv.data==undefined)?{}:conv.data;
@@ -24,7 +25,7 @@ module.exports=function(agent,conv) {
 
     if (gotname && gotage && gotgender) {
       conv.data.currentIntent='general_feeling';
-      conv.ask(`Ok ${name}, We're on board let's begin. What is your blood pressure level? if you are not sure exactly just tell me if it is higher than normal`)
+      conv.ask(`Ok ${name}, We're on board let's begin. What is your blood pressure level? If you are not sure exactly just tell me if it is higher than normal`)
       conv.ask(new Suggestions(['High','Very high','Low','Normal','90-134','80/120']))
       return conv;
     }

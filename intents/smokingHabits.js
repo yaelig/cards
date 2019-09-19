@@ -5,6 +5,7 @@ smokingAmountOftenPhrases=['a day','per day','in a day','a week','per week','in 
 'in a month','every day','every week','every month','each month','each day','every hour','per hour','at weekends',
 'every weekend','on weekends','a lot','very much','very often','sometimes'];
 module.exports=function(agent,conv) {
+  conv.data.qls=0;
     conv.data=(conv.data==undefined)?{}:conv.data;
       // const smokingAmount=agent.parameters.smokingAmount;
       const SmokingOften=agent.parameters.SmokingOften||agent.parameters.smokingAmount;
@@ -43,7 +44,8 @@ let gotSmokingOften = conv.data.SmokingOften==undefined?0:1
   else
       if( gotSmokingType&& !gotSmokingOften) {
           conv.ask(`Well, how much do you smoke ${SmokingType}?`);
-          conv.ask(new Suggestions(['about 5 cigarettes a day','about 10 cigarettes a day','about 20 cigarettes a day', '1 packet per day']));          return conv;
+          conv.ask(new Suggestions(['about 5 cigarettes a day','about 10 cigarettes a day','about 20 cigarettes a day', '1 packet per day']));  
+          return conv;
       } 
       else
       if(!gotSmokingType && gotSmokingOften){
@@ -51,7 +53,7 @@ let gotSmokingOften = conv.data.SmokingOften==undefined?0:1
         conv.ask( new Suggestions(['Marlboro','Parlament','Camel','Time','Cambridge','Pall Mall','Winston']))
         return conv;
       }
-           else
+      else
       if(gotSmokingType && gotSmokingOften){
        const endOfConversation=require('./EndOfConversation')
        return endOfConversation(agent,conv)

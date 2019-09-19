@@ -1,4 +1,6 @@
 const service=require('./service')
+const {userId}=require('../app')
+const{Button}=require('../app')
 module.exports=function(agent,conv){
         console.log('endOfConversation')
         console.log(JSON.stringify(conv.data))
@@ -29,11 +31,19 @@ module.exports=function(agent,conv){
       SmokingType:conv.data.SmokingType
         };
         const form=conv.data.form   
-        console.log("form endofconv")
+        console.log("form end of conv")
         console.log(JSON.stringify(form))     
         service(form,conv)
     conv.ask(`Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
     doctor. Hope you'd feel better very soon!`)
+    conv.ask(new Button({
+    title: 'click here to see report',
+    url: `https://www.google.com/url?q=https://storage.cloud.google.com/myheartpdfbucket/${userId}.html `,
+    }))
+    conv.ask(new Button({
+      title: 'click here to download your report',
+      url: `https://www.google.com/url?q=https://storage.cloud.google.com/myheartpdfbucket/${userId}.pdf `,
+      }))
     return conv;
     
    

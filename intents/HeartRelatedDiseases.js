@@ -2,7 +2,7 @@ var yesPhrases=['Yes','yes','yeah','yep','yeap','that is true','true','that is r
 var noPhrases=['No','no','nope','nah','not','not at all'];
 const {Suggestions}=require('actions-on-google')
 module.exports=function(agent,conv) {
-    
+  conv.data.qls=0;
       console.log("c   "+conv.data.currentIntent)
       console.log("q    "+conv.data.hrdQ)
       conv.data=(conv.data==undefined)?{}:conv.data;
@@ -70,13 +70,13 @@ module.exports=function(agent,conv) {
      if(gotDiabetes && gotCholesterol&&gotHeart_disease) {
        conv.data.currentIntent='obesity'
         conv.data.oaeQ='exercise';
-        conv.ask(`Thanks for that, we'll be finished in a bit. Please tell me about your exercise habits, do you exercise at all?, how often? et cetera`)
+        conv.ask(`Thanks for that, we'll be finished soon. Please tell me about your exercise habits, Do you exercise at all? How often?`)
         conv.ask(new Suggestions(['I go to the gym','I run sometimes','I like walking a lot','Jogging very often']))
         return conv;
     } else if(gotDiabetes && gotCholesterol&&!gotHeart_disease) {
       conv.data.hrdQ='heart'
       conv.ask('Okay, Do you suffer from any specific heart diseses or had experienced a heart attack? please detail');
-      conv.ask(new Suggestions(['No','Yes','My heart is cool','Had a heart attack','Cardiac catheterization']))
+      conv.ask(new Suggestions(['No','Yes','My heart is allright','Had a heart attack','Cardiac catheterization']))
       return conv;
     } else if(gotDiabetes && !gotCholesterol&&gotHeart_disease){
       conv.data.hrdQ='cholesterol'
@@ -102,7 +102,7 @@ module.exports=function(agent,conv) {
     }else if(!gotDiabetes && gotCholesterol&&!gotHeart_disease){
       conv.data.hrdQ='heart'
         conv.ask('Any specific heart diseses or have you experienced a heart attack?');
-        conv.ask(new Suggestions(['No','Yes','My heart is cool','Had a heart attack','Cardiac catheterization']))
+        conv.ask(new Suggestions(['No','Yes','My heart is allright','Had a heart attack','Cardiac catheterization']))
         return conv;
     }else if(!gotDiabetes && !gotCholesterol&&!gotHeart_disease){
       conv.data.hrdQ='heart'
