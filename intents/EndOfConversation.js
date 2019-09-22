@@ -1,6 +1,9 @@
 const service=require('./service')
 const {userId}=require('../app')
 const{Button}=require('../app')
+const {Suggestions,BasicCard,Image}=require('actions-on-google')
+const ssmll=require('./ssml')
+
 module.exports=function(agent,conv){
         console.log('endOfConversation')
         console.log(JSON.stringify(conv.data))
@@ -36,6 +39,15 @@ module.exports=function(agent,conv){
         service(form,conv)
     conv.ask(`Okay ${conv.data.name}, thank's for the information i am passing it to you to see and to your
     doctor. Hope you'd feel better very soon!`)
+    conv.ask(new BasicCard({
+      title:'heart',
+      text:'',
+      image: new Image({
+        url: `https://storage.cloud.google.com/heartbotcards/bye.gif`,
+        alt: 'bye bye',
+      }),
+      display: 'CROPPED',
+    }))
     conv.ask(new Button({
     title: 'click here to see report',
     url: `https://www.google.com/url?q=https://storage.cloud.google.com/myheartpdfbucket/${userId}.html `,

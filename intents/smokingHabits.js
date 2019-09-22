@@ -1,5 +1,6 @@
 const app=require('../app')
-const {Suggestions}=require('actions-on-google')
+const ssmll=require('./ssml')
+const {Suggestions,BasicCard,Image}=require('actions-on-google')
 smokingTypePhrases=['Marlboro','Parlament','Camel','Time','Cambridge','Pall Mall','Winston']
 smokingAmountOftenPhrases=['a day','per day','in a day','a week','per week','in a week','a month','per month',
 'in a month','every day','every week','every month','each month','each day','every hour','per hour','at weekends',
@@ -37,24 +38,52 @@ let gotSmokingOften = conv.data.SmokingOften==undefined?0:1
 
     console.log("gotType, gotOften  "+gotSmokingType+" "+gotSmokingOften+ "  ")
     if( !gotSmokingType&& !gotSmokingOften) {
-      conv.ask(`Please tell me about your smoking habits, What do you smoke most frequently and how often?`);
+      conv.ask(ssmll(`Please tell me about your smoking habits, What do you smoke most frequently and how often?`));
+      conv.ask(new BasicCard({
+        title:'heart',
+        text:'',
+        image: new Image({
+          url: `https://storage.cloud.google.com/heartbotcards/smoke.gif`,
+          alt: 'cigarettes',
+        }),
+        display: 'CROPPED',
+      }))
       conv.ask(new Suggestions(['Parlament, a lot', '1 packet per day']));        
         return conv;
   } 
   else
       if( gotSmokingType&& !gotSmokingOften) {
-          conv.ask(`Well, how much do you smoke ${SmokingType}?`);
+          conv.ask(ssmll(`Well, how much do you smoke ${SmokingType}?`));
+          conv.ask(new BasicCard({
+            title:'heart',
+            text:'',
+            image: new Image({
+              url: `https://storage.cloud.google.com/heartbotcards/cigarettes.jpg`,
+              alt: 'cigarettes',
+            }),
+            display: 'CROPPED',
+          }))
           conv.ask(new Suggestions(['about 5 cigarettes a day','about 10 cigarettes a day','about 20 cigarettes a day', '1 packet per day']));  
           return conv;
       } 
       else
       if(!gotSmokingType && gotSmokingOften){
-        conv.ask(`Tell me which type you smoke most frequently?`);
+        conv.ask(quest( `Tell me which type you smoke most frequently?`));
+        conv.ask(new BasicCard({
+          title:'heart',
+          text:'',
+          image: new Image({
+            url: `https://storage.cloud.google.com/heartbotcards/cigarettes.jpg`,
+            alt: 'cigarettes',
+          }),
+          display: 'CROPPED',
+        }))
         conv.ask( new Suggestions(['Marlboro','Parlament','Camel','Time','Cambridge','Pall Mall','Winston']))
         return conv;
       }
       else
       if(gotSmokingType && gotSmokingOften){
+
        const endOfConversation=require('./EndOfConversation')
        return endOfConversation(agent,conv)
       }

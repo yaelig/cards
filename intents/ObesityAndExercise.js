@@ -1,6 +1,8 @@
 const yesPhrases=['Yes','yes','yeah','yep','yeap','that is true','true','that is right','right'];
 const noPhrases=['No','no','nope','nah','not'];
-const {Suggestions}=require('actions-on-google')
+const ssmll=require('./ssml')
+
+const {Suggestions,BasicCard,Image}=require('actions-on-google')
 module.exports=function(agent,conv) {  
   conv.data.qls=0;
 console.log("obesity and exercise ")
@@ -76,27 +78,67 @@ console.log("obesity and exercise ")
       if(gotExercise&&gotObesity){
         console.log("if gotExercise&&gotObesity")
         conv.data.currentIntent='drugs'
-        conv.ask('Ok thanks for that, Are there any drugs you take regularly? please detail');
+        conv.ask(ssmll('Ok thanks for that, Are there any drugs you take regularly? please detail'));
+        conv.ask(new BasicCard({
+          title:'',
+          text:''
+     ,
+          image: new Image({
+            url: `https://storage.cloud.google.com/heartbotcards/pills.gif`,
+            alt: `drugs`,
+          }),
+          display: 'CROPPED',
+        }));
         conv.ask(new Suggestions(['No','Beclomethasone','Hydroxyzine','Triamcinolone','I take some pills']))
         return conv;
       }
       else 
       if (gotExercise && !gotObesity) {
         conv.data.oaeQ="obesity"
-        conv.ask('I see okay, do you suffer from obesity?');
+        conv.ask(ssmll('I see okay, do you suffer from obesity?'));
+        conv.ask(new BasicCard({
+          title:'',
+          text:''
+     ,
+          image: new Image({
+            url: `https://storage.cloud.google.com/heartbotcards/weight.gif`,
+            alt: `weight`,
+          }),
+          display: 'CROPPED',
+        }));
         conv.ask(new Suggestions(['Yes','No','I am very skinny','A little','Over weight']))
         return conv;
     }
     else 
     if (gotObesity && !gotExercise) {
       conv.data.oaeQ="exercise"
-     conv.ask('I see, do you exercise? ');
+     conv.ask(ssmll('I see, do you exercise? '));
+     conv.ask(new BasicCard({
+      title:'',
+      text:''
+ ,
+      image: new Image({
+        url: `https://storage.cloud.google.com/heartbotcards/working-out-characters2-.gif`,
+        alt: `${name}`,
+      }),
+      display: 'CROPPED',
+    }));
      conv.ask(new Suggestions(['no','yes','I go to the gym','I run','I like walking']))
      return conv;
     }
     else
    {
-      conv.ask(`Thank's, we'll be finished soon. Please tell me about your exercise habits. Do you exercise at all?`);
+      conv.ask(ssmll(`Thank's, we'll be finished soon. Please tell me about your exercise habits. Do you exercise at all?`));
+      conv.ask(new BasicCard({
+        title:'',
+        text:''
+   ,
+        image: new Image({
+          url: `https://storage.cloud.google.com/heartbotcards/working-out-characters2-.gif`,
+          alt: `${name}`,
+        }),
+        display: 'CROPPED',
+      }));
       conv.ask(new Suggestions(['I go to the gym','I run sometimes','I like walking','Jogging very often']))
       return conv;
     }

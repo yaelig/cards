@@ -1,5 +1,7 @@
 const app=require('../app')
-const{Suggestions}=require('actions-on-google')
+const ssmll=require('./ssml')
+
+const{BasicCard,Image,Button,Suggestions}=require('actions-on-google')
 module.exports=function(agent,conv) {    
   conv.data.qls=0;
         console.log("personal details form "+JSON.stringify(conv.data.form))
@@ -25,37 +27,142 @@ module.exports=function(agent,conv) {
 
     if (gotname && gotage && gotgender) {
       conv.data.currentIntent='general_feeling';
-      conv.ask(`Ok ${name}, We're on board let's begin. What is your blood pressure level? If you are not sure exactly just tell me if it is higher than normal`)
+      conv.ask(ssmll(`hello  ${name}, We're on board ! . let's begin. What is your blood pressure level? If you are not sure exactly just tell me if it is higher than normal`))
+      conv.ask(new BasicCard({
+        title:`hello  ${name}`,
+        text:'',
+        image: new Image({
+          url: ` https://storage.cloud.google.com/heartbotcards/blood.gif`,
+          alt: `${name}`,
+        }),
+        display: 'CROPPED',
+      }));
       conv.ask(new Suggestions(['High','Very high','Low','Normal','90-134','80/120']))
       return conv;
     }
     else if (gotname && !gotage&&!gotgender) {
-   conv.ask(`Ok, ${name}, How old are you? and what is you'r gender?`)
+   conv.ask(ssmll(`Ok, ${name}, How old are you? and what is you'r gender?`))
+   conv.ask(new BasicCard({
+    title:`hello  ${name}`,
+    text:'',
+    image: new Image({
+      url: ` https://storage.cloud.google.com/heartbotcards/gender.gif`,
+      alt: `${name}`,
+    }),
+    display: 'CROPPED',
+  }));
    return conv;
     }
     else if (gotname && gotage&&!gotgender){ 
-    conv.ask(`Ok, ${name}, What gender you belong to`)
+    conv.ask(ssmll(`Ok, ${name}, What gender you belong to`))
+   
+    conv.ask(new BasicCard({
+      title:`hello  ${name}`,
+      text:'',
+      image: new Image({
+        url: ` https://storage.cloud.google.com/heartbotcards/gender.gif`,
+        alt: `${name}`,
+      }),
+      display: 'CROPPED',
+    }));
     conv.ask(new Suggestions(['Male','Female','Other']))
     return conv;
     }
     else if(gotname && !gotage&&gotgender) {
-    conv.ask(`Ok, ${name}, How old are you?`)
+      conv.ask(ssmll(`Ok, ${name}, How old are you?`))
+
+     if(conv.data.gender=='male'){
+      conv.ask(new BasicCard({
+        title:`hello  ${name}`,
+        text:'',
+        image: new Image({
+          url: `https://storage.cloud.google.com/heartbotcards/men.jpg`,
+          alt: `${name}`,
+        }),
+        display: 'CROPPED',
+      }));
+   }
+    else{
+      conv.ask(new BasicCard({
+        title:`hello  ${name}`,
+        text:''
+   ,
+        image: new Image({
+          url: `https://storage.cloud.google.com/heartbotcards/women.jpg`,
+          alt: `${name}`,
+        }),
+        display: 'CROPPED',
+      }));
+    } 
     return conv;
     }
     else if (!gotname && gotage&&gotgender) {
     conv.ask(`What's your name please?`)
+    conv.ask(new BasicCard({
+      title:`hello  ${name}`,
+      text:''
+ ,
+      image: new Image({
+        url: `https://storage.cloud.google.com/heartbotcards/Research.gif`,
+        alt: `${name}`,
+      }),
+      display: 'CROPPED',
+    }));
     return conv;
     }
     else if (!gotname && !gotage&&gotgender) {
-    conv.ask(`Well dear ${gender}, What is your name and how old are you`)
+    conv.ask(ssmll(`Well dear person, What is your name and how old are you`))
+    if(conv.data.gender=='male'){
+      conv.ask(new BasicCard({
+        title:`hello  ${name}`,
+        text:'',
+        image: new Image({
+          url: `https://storage.cloud.google.com/heartbotcards/men.jpg`,
+          alt: `${name}`,
+        }),
+        display: 'CROPPED',
+      }));
+   }
+    else{
+      conv.ask(new BasicCard({
+        title:`hello  ${name}`,
+        text:''
+   ,
+        image: new Image({
+          url: `https://storage.cloud.google.com/heartbotcards/women.jpg`,
+          alt: `${name}`,
+        }),
+        display: 'CROPPED',
+      }));
+    } 
     return conv;
     }
      else if(!gotname && gotage&&!gotgender){
      conv.ask('Let me know what is your name and what is your gender')
+     conv.ask(new BasicCard({
+      title:`hello  ${name}`,
+      text:''
+ ,
+      image: new Image({
+        url: `https://storage.cloud.google.com/heartbotcards/Research.gif`,
+        alt: `${name}`,
+      }),
+      display: 'CROPPED',
+    }));
      return conv;
      }
      else if (!gotname && !gotage&&!gotgender) {
      conv.ask(`I want to get to know you before we begin. what is you'r name?`)
+     conv.ask(new BasicCard({
+      title:`hello  ${name}`,
+      text:''
+ ,
+      image: new Image({
+        url: `https://storage.cloud.google.com/heartbotcards/Research.gif`,
+        alt: `${name}`,
+      }),
+      display: 'CROPPED',
+    }));
      return conv;
      }
 }

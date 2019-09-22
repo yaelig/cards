@@ -36,6 +36,15 @@ module.exports=function(agent,conv) {
           console.log("entered if gotDrugs")
          conv.data.currentIntent='smoking'
          conv.ask('All right, there is one last thing. Do you smoke?')
+         conv.ask(new BasicCard({
+          title:'heart',
+          text:'',
+          image: new Image({
+            url: `https://storage.cloud.google.com/heartbotcards/smoke.gif`,
+            alt: 'cigarettes',
+          }),
+          display: 'CROPPED',
+        }))
          conv.ask(new Suggestions(['Yes','No']))
         return conv;
         }

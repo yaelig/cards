@@ -7,6 +7,7 @@ const smokingHabits=require('./intents/smokingHabits')
 const ObesityAndExercise=require('./intents/ObesityAndExercise')
 const HeartRelatedDiseases=require('./intents/HeartRelatedDiseases')
 const Drugs=require('./intents/Drugs')
+const ssmll=require('./intents/ssml')
 const service=require('./intents/service')
 const {dialogflow,Permission,SignIn,actionssdk} = require('actions-on-google')
 
@@ -21,11 +22,11 @@ app.get('/', (req, res) => {res.json({success : true}) })
 app.post('/', express.json(), (req, res) => {
   const agent = new WebhookClient({ request: req, response: res })
   const conv=agent.conv();
- const token=conv.user.profile.token;
- const shortToken=token.substr(token.length - 20); 
- const userId=shortToken+"$"+Date.now()
- module.exports.userId= userId ;
- console.log("user id: "+userId)
+//  const token=conv.user.profile.token;
+//  const shortToken=token.substr(token.length - 20); 
+//  const userId=shortToken+"$"+Date.now()
+//  module.exports.userId= userId ;
+//  console.log("user id: "+userId)
  console.log("stor " +JSON.stringify(conv.data))
   // function get_permission_func(){
   //   console.log("enterd get permission func ")
@@ -45,7 +46,7 @@ app.post('/', express.json(), (req, res) => {
 } 
 function welcome_func(){
   console.log('entered welcome func ')
-  console.log(JSON.stringify(agent.context))
+  // console.log(JSON.stringify(agent.context))
   conv.data.qls=0;
   conv.data.currentIntent='personal_details';
   agent.add(welcome(conv))
@@ -114,6 +115,7 @@ function diseases(){
   intentMap.set('inform.Drugs - no',end)
   intentMap.set('inform.SmokingHabits',smoking)
   intentMap.set('EndOfConversation',end)
+  
   agent.handleRequest(intentMap)
  })
 

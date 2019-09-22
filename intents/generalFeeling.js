@@ -1,6 +1,8 @@
 const {dialogflow,Permission,SignIn,actionssdk,Suggestions,BasicCard,Image} = require('actions-on-google')
 yesPhrases=['Yes','yes','yeah','yep','yeap','that is true','true','that is right','right']
 noPhrases=['No','no','nope','nah','not','not at all','noo','never','you wish','it is not',`it's not`,'its not']
+const ssmll=require('./ssml')
+
 module.exports=function(agent,conv){
       const diastolic_bloodPressure=(agent.parameters.bloodPressureLevel==undefined)?undefined:agent.parameters.bloodPressureLevel.diastolic_bloodPressure;
       const systolic_bloodPressure=(agent.parameters.bloodPressureLevel==undefined)?undefined:agent.parameters.bloodPressureLevel.systolic_bloodPressure;
@@ -46,21 +48,20 @@ module.exports=function(agent,conv){
       conv.data.currentIntent='diseases';
       conv.data.hrdQ='heart';
       conv.ask(`Alright, I need some information about your medical history please. Do you suffer from any specific heart diseases?`)
+      conv.ask(new BasicCard({
+        title:'heart',
+        text:'',
+        image: new Image({
+          url: `https://storage.cloud.google.com/heartbotcards/tenor.gif`,
+          alt: '',
+        }),
+        display: 'CROPPED',
+      }))
       conv.ask(new Suggestions(['No','Yes','My heart is allright','Had a heart attack','Cardiac catheterization']))
       return conv;
     }
     else if(!gotbloodPressure){
       conv.ask('Have you tested your blood pressure lately? Please detail');
-      
- conv.ask(new BasicCard({
-  title:'heart',
-  text:'',
-  image: new Image({
-    url: `https://media.tenor.com/images/ddb929424bb77ac0fe93c843fc8eba03/tenor.gif`,
-    alt: 'Image alternate text',
-  }),
-  display: 'CROPPED',
-}))
       conv.ask(new Suggestions(['High','Very high','Low','Normal','90-134','80/120']))
       return conv;
     }
